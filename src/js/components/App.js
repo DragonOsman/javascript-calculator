@@ -187,6 +187,7 @@ const App = props => {
   useEffect(() => {
     const handleNumberButtonClick = event => {
       if (event.target.name === "number-button") {
+        console.log(event.target.name);
         if (currentValue === "0") {
           setCurrentValue(event.target.textContent);
         } else {

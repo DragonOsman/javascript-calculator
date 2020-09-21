@@ -5,13 +5,14 @@ body {
 
 main #display {
   background-color: #a9a9a9;
-  color: #fff;
 }
 main #display #stored {
   font-size: 12px;
+  color: #fff;
 }
 main #display #current {
   font-size: 15px;
+  color: #fff;
 }
 
 /*# sourceMappingURL=style.css.map */
