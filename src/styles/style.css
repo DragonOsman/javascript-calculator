@@ -5,6 +5,7 @@ body {
 
 main #display {
   background-color: #a9a9a9;
+  color: #fff;
 }
 main #display #stored {
   font-size: 12px;
@@ -12,5 +13,3 @@ main #display #stored {
 main #display #current {
   font-size: 15px;
 }
-
-/*# sourceMappingURL=style.css.map */
