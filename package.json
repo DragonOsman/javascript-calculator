@@ -14,10 +14,22 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "sass": "node-sass -w scss/ -o css/ --recursive"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "standard",
+      "plugin:react/recommended"
+    ],
+    "rules": {
+      "prefer-const": "warn",
+      "yoda": "warn",
+      "eqeqeq": "warn",
+      "space-before-function-paren": "off",
+      "linebreak-style": "off"
+    }
   },
   "browserslist": {
     "production": [
@@ -30,5 +42,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-standard": "^4.0.1"
   }
 }

@@ -1,0 +1,18 @@
+body {
+  background-color: #000;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+main {
+  & #display {
+    background-color: #a9a9a9;
+
+    & #stored {
+      font-size: 12px;
+    }
+
+    & #current {
+      font-size: 15px;
+    }
+  }
+}
