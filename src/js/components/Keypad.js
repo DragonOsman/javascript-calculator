@@ -13,10 +13,10 @@ const Keypad = props => {
   );
 };
 Keypad.propTypes = {
-  className: PropTypes.string,
-  id: PropTypes.string,
-  name: PropTypes.string,
-  value: PropTypes.string
+  className: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired
 };
 
 export default Keypad;

@@ -195,9 +195,9 @@ const App = props => {
       if (event.target.name === "number-button") {
         console.log(event.target.name);
         if (currentValue === "0") {
-          setCurrentValue(event.target.textContent);
+          setCurrentValue(event.target.value);
         } else {
-          setCurrentValue(currentValue.concat(event.target.textContent));
+          setCurrentValue(currentValue.concat(event.target.value));
         }
       }
     };

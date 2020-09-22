@@ -10,8 +10,8 @@ const Display = props => {
   );
 };
 Display.propTypes = {
-  storedValue: PropTypes.string,
-  currentValue: PropTypes.string
+  storedValue: PropTypes.string.isRequired,
+  currentValue: PropTypes.string.isRequired
 };
 
 export default Display;
