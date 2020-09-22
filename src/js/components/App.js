@@ -154,6 +154,12 @@ const buttons = [{
   id: "three",
   className: "number"
 }, {
+  name: "add",
+  value: "+",
+  type: "operator",
+  id: "add",
+  className: "operator"
+}, {
   name: "sign-switch",
   value: "±",
   type: "effect",
