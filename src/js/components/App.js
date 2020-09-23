@@ -189,27 +189,32 @@ const App = props => {
   const [currentValue, setCurrentValue] = useState("0");
   // const [currentMemoryValue, setMemory] = useState("");
   const [storedValue, setStoredValue] = useState("");
-  const [wasOperatorClicked, setWasOperatorClicked] = useState(false);
+
+  let wasOperatorClicked = false;
+  let wasEqualsClicked = false;
 
   const handleNumberButtonClick = event => {
-    console.log(wasOperatorClicked.toString());
-    if (event.target.name === "number-button") {
-      console.log(event.target.name);
-      if (currentValue === "0") {
-        setCurrentValue(event.target.textContent);
-      } else {
-        setCurrentValue(currentValue.concat(event.target.textContent));
+    if (!wasOperatorClicked || !wasEqualsClicked) {
+      if (event.target.name === "number-button") {
+        if (currentValue === "0") {
+          setCurrentValue(event.target.textContent);
+        } else {
+          setCurrentValue(currentValue.concat(event.target.textContent));
+        }
       }
-    }
-
-    if (wasOperatorClicked) {
+    } else if (wasEqualsClicked) {
+      if (event.target.name === "number-button") {
+        setCurrentValue(event.target.textContent);
+      }
+    } else if (wasOperatorClicked) {
+      setStoredValue(storedValue.concat(event.target.textContent));
       setCurrentValue(event.target.textContent);
     }
   };
 
   const handleOperatorButtonClick = event => {
-    setWasOperatorClicked(true);
-    if (event.target.name === "add" || event.target.name === "subtract" ||
+    wasOperatorClicked = true;
+    if (event.target.name === "add" || event.target.name === "minus" ||
     event.target.name === "multipy" || event.target.name === "divide") {
       setStoredValue(`${currentValue} ${event.target.textContent} `);
     }
@@ -220,6 +225,7 @@ const App = props => {
   // stored value to empty string
   const parser = new exprEval.Parser();
   const handleEqualsButtonClick = event => {
+    wasEqualsClicked = true;
     if (event.target.textContent === "=") {
       setStoredValue(storedValue.concat(currentValue));
       setCurrentValue(parser.parse(storedValue).evaluate());

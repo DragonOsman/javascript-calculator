@@ -5,6 +5,7 @@ const Display = props => {
   return (
     <div id="display">
       <p id="stored">{props.storedValue}</p>
+      <br />
       <p id="current">{props.currentValue}</p>
     </div>
   );
