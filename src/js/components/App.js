@@ -189,37 +189,53 @@ const App = props => {
   const [currentValue, setCurrentValue] = useState("0");
   // const [currentMemoryValue, setMemory] = useState("");
   const [storedValue, setStoredValue] = useState("");
+  const [wasOperatorClicked, setWasOperatorClicked] = useState(false);
+
+  const handleNumberButtonClick = event => {
+    console.log(wasOperatorClicked.toString());
+    if (event.target.name === "number-button") {
+      console.log(event.target.name);
+      if (currentValue === "0") {
+        setCurrentValue(event.target.textContent);
+      } else {
+        setCurrentValue(currentValue.concat(event.target.textContent));
+      }
+    }
+
+    if (wasOperatorClicked) {
+      setCurrentValue(event.target.textContent);
+    }
+  };
+
+  const handleOperatorButtonClick = event => {
+    setWasOperatorClicked(true);
+    if (event.target.name === "add" || event.target.name === "subtract" ||
+    event.target.name === "multipy" || event.target.name === "divide") {
+      setStoredValue(`${currentValue} ${event.target.textContent} `);
+    }
+  };
+
+  // calculate the result for the current
+  // value and display it, then reset the
+  // stored value to empty string
+  const parser = new exprEval.Parser();
+  const handleEqualsButtonClick = event => {
+    if (event.target.textContent === "=") {
+      setStoredValue(storedValue.concat(currentValue));
+      setCurrentValue(parser.parse(storedValue).evaluate());
+      setStoredValue("");
+    }
+  };
 
   useEffect(() => {
-    const handleNumberButtonClick = event => {
-      if (event.target.name === "number-button") {
-        console.log(event.target.name);
-        if (currentValue === "0") {
-          setCurrentValue(event.target.value);
-        } else {
-          setCurrentValue(currentValue.concat(event.target.value));
-        }
-      }
-    };
-
-    // calculate the result for the current
-    // value and display it, then reset the
-    // stored value to empty string
-    const parser = new exprEval.Parser();
-    const handleEqualsButtonClick = event => {
-      if (event.target.textContent === "=") {
-        setStoredValue(storedValue.concat(currentValue));
-        setCurrentValue(parser.parse(storedValue).evaluate());
-        setStoredValue("");
-      }
-    };
-
     document.addEventListener("click", handleEqualsButtonClick);
     document.addEventListener("click", handleNumberButtonClick);
+    document.addEventListener("click", handleOperatorButtonClick);
 
     return () => {
       document.removeEventListener("click", handleNumberButtonClick);
       document.removeEventListener("click", handleEqualsButtonClick);
+      document.removeEventListener("click", handleOperatorButtonClick);
     };
   });
 

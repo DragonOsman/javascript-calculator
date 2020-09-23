@@ -3,16 +3,27 @@ body {
   font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
-main #display {
+main #root {
+  width: 70%;
+}
+main #root #display {
   background-color: #a9a9a9;
+  height: 50px;
+  position: relative;
 }
-main #display #stored {
+main #root #display #stored {
   font-size: 12px;
-  color: #fff;
+  color: #000;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
-main #display #current {
+main #root #display #current {
   font-size: 15px;
-  color: #fff;
+  color: #000;
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 
 /*# sourceMappingURL=style.css.map */
