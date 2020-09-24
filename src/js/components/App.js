@@ -213,10 +213,15 @@ const App = props => {
   };
 
   const handleOperatorButtonClick = event => {
-    wasOperatorClicked = true;
-    if (event.target.name === "add" || event.target.name === "minus" ||
-    event.target.name === "multipy" || event.target.name === "divide") {
-      setStoredValue(`${currentValue} ${event.target.textContent} `);
+    if (!(event.target.name === "add" || event.target.name === "minus" ||
+    event.target.name === "multipy" || event.target.name === "divide")) {
+      return null;
+    } else {
+      wasOperatorClicked = true;
+      if (event.target.name === "add" || event.target.name === "minus" ||
+          event.target.name === "multipy" || event.target.name === "divide") {
+        setStoredValue(`${currentValue} ${event.target.textContent} `);
+      }
     }
   };
 
@@ -225,11 +230,15 @@ const App = props => {
   // stored value to empty string
   const parser = new exprEval.Parser();
   const handleEqualsButtonClick = event => {
-    wasEqualsClicked = true;
-    if (event.target.textContent === "=") {
-      setStoredValue(storedValue.concat(currentValue));
-      setCurrentValue(parser.parse(storedValue).evaluate());
-      setStoredValue("");
+    if (!(event.target.textContent === "=")) {
+      return null;
+    } else {
+      wasEqualsClicked = true;
+      if (event.target.textContent === "=") {
+        setStoredValue(storedValue.concat(currentValue));
+        setCurrentValue(parser.parse(storedValue).evaluate());
+        setStoredValue("");
+      }
     }
   };
 
