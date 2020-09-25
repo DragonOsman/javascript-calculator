@@ -194,21 +194,16 @@ const App = props => {
 
   const handleNumberClick = event => {
     if (!operatorButtonClicked && !equalsButtonClicked) {
-      if (currentValue === "0") {
-        setCurrentValue(event.target.textContent);
-      }
       const newValue = currentValue.concat(event.target.textContent);
       setCurrentValue(newValue);
     } else if (!operatorButtonClicked && equalsButtonClicked) {
-      if (currentValue === "0") {
-        setCurrentValue(event.target.textContent);
-      }
       setCurrentValue(event.target.textContent);
       setStoredValue("");
     } else if (operatorButtonClicked && !equalsButtonClicked) {
-      if (currentValue === "0") {
-        setCurrentValue(event.target.textContent);
-      }
+      setCurrentValue(event.target.textContent);
+    }
+
+    if (currentValue === "0") {
       setCurrentValue(event.target.textContent);
     }
   };
@@ -218,7 +213,7 @@ const App = props => {
     setEqualsClicked(true);
     const stored = storedValue.concat(currentValue);
     setCurrentValue(parser.parse(storedValue).evaluate());
-    setStoredValue(`${stored} =`);
+    setStoredValue(`${stored} ${event.target.textContent}`);
   };
 
   const handleOperatorClick = event => {
@@ -240,7 +235,7 @@ const App = props => {
     if (event.target.name === "number-button") {
       handleNumberClick(event);
     } else if (event.target.name === "add" || event.target.name === "minus" ||
-    event.target.name === "mulitply" || event.target.name === "divide") {
+    event.target.name === "multiply" || event.target.name === "divide") {
       handleOperatorClick(event);
     } else if (event.target.name === "clear") {
       handleClearClick();
@@ -254,10 +249,15 @@ const App = props => {
   };
 
   useEffect(() => {
-    document.addEventListener("click", clickHandler);
+    const buttons = document.getElementsByTagName("button");
+    for (const button of buttons) {
+      button.addEventListener("click", clickHandler);
+    }
 
     return () => {
-      document.removeEventListener("click", clickHandler);
+      for (const button of buttons) {
+        button.removeEventListener("click", clickHandler);
+      }
     };
   });
 
