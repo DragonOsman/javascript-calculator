@@ -49,7 +49,7 @@ const buttons = [{
   name: "clear-entry",
   value: "CE",
   type: "effect",
-  id: "clear-everything",
+  id: "clear-entry",
   className: "effect"
 }, {
   name: "clear",
@@ -189,68 +189,75 @@ const App = props => {
   const [currentValue, setCurrentValue] = useState("0");
   // const [currentMemoryValue, setMemory] = useState("");
   const [storedValue, setStoredValue] = useState("");
+  const [equalsButtonClicked, setEqualsClicked] = useState(false);
+  const [operatorButtonClicked, setOperatorClicked] = useState(false);
 
-  let wasOperatorClicked = false;
-  let wasEqualsClicked = false;
-
-  const handleNumberButtonClick = event => {
-    if (!wasOperatorClicked || !wasEqualsClicked) {
-      if (event.target.name === "number-button") {
-        if (currentValue === "0") {
-          setCurrentValue(event.target.textContent);
-        } else {
-          setCurrentValue(currentValue.concat(event.target.textContent));
-        }
-      }
-    } else if (wasEqualsClicked) {
-      if (event.target.name === "number-button") {
+  const handleNumberClick = event => {
+    if (!operatorButtonClicked && !equalsButtonClicked) {
+      if (currentValue === "0") {
         setCurrentValue(event.target.textContent);
       }
-    } else if (wasOperatorClicked) {
-      setStoredValue(storedValue.concat(event.target.textContent));
+      const newValue = currentValue.concat(event.target.textContent);
+      setCurrentValue(newValue);
+    } else if (!operatorButtonClicked && equalsButtonClicked) {
+      if (currentValue === "0") {
+        setCurrentValue(event.target.textContent);
+      }
+      setCurrentValue(event.target.textContent);
+      setStoredValue("");
+    } else if (operatorButtonClicked && !equalsButtonClicked) {
+      if (currentValue === "0") {
+        setCurrentValue(event.target.textContent);
+      }
       setCurrentValue(event.target.textContent);
     }
   };
 
-  const handleOperatorButtonClick = event => {
-    if (!(event.target.name === "add" || event.target.name === "minus" ||
-    event.target.name === "multipy" || event.target.name === "divide")) {
-      return null;
-    } else {
-      wasOperatorClicked = true;
-      if (event.target.name === "add" || event.target.name === "minus" ||
-          event.target.name === "multipy" || event.target.name === "divide") {
-        setStoredValue(`${currentValue} ${event.target.textContent} `);
-      }
-    }
+  const parser = new exprEval.Parser();
+  const handleEqualsClick = event => {
+    setEqualsClicked(true);
+    const stored = storedValue.concat(currentValue);
+    setCurrentValue(parser.parse(storedValue).evaluate());
+    setStoredValue(`${stored} =`);
   };
 
-  // calculate the result for the current
-  // value and display it, then reset the
-  // stored value to empty string
-  const parser = new exprEval.Parser();
-  const handleEqualsButtonClick = event => {
-    if (!(event.target.textContent === "=")) {
-      return null;
+  const handleOperatorClick = event => {
+    setOperatorClicked(true);
+    const stored = storedValue.concat(`${currentValue} ${event.target.textContent}`);
+    setStoredValue(stored);
+  };
+
+  const handleClearClick = () => {
+    setStoredValue("");
+    setCurrentValue("0");
+  };
+
+  const handleClearEntryClick = () => {
+    setCurrentValue("0");
+  };
+
+  const clickHandler = event => {
+    if (event.target.name === "number-button") {
+      handleNumberClick(event);
+    } else if (event.target.name === "add" || event.target.name === "minus" ||
+    event.target.name === "mulitply" || event.target.name === "divide") {
+      handleOperatorClick(event);
+    } else if (event.target.name === "clear") {
+      handleClearClick();
+    } else if (event.target.name === "clear-entry") {
+      handleClearEntryClick();
+    } else if (event.target.name === "equals") {
+      handleEqualsClick(event);
     } else {
-      wasEqualsClicked = true;
-      if (event.target.textContent === "=") {
-        setStoredValue(storedValue.concat(currentValue));
-        setCurrentValue(parser.parse(storedValue).evaluate());
-        setStoredValue("");
-      }
+      return null;
     }
   };
 
   useEffect(() => {
-    document.addEventListener("click", handleEqualsButtonClick);
-    document.addEventListener("click", handleNumberButtonClick);
-    document.addEventListener("click", handleOperatorButtonClick);
+    document.addEventListener("click", clickHandler);
 
     return () => {
-      document.removeEventListener("click", handleNumberButtonClick);
-      document.removeEventListener("click", handleEqualsButtonClick);
-      document.removeEventListener("click", handleOperatorButtonClick);
+      document.removeEventListener("click", clickHandler);
     };
   });
 
