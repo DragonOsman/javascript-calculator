@@ -212,13 +212,30 @@ const App = props => {
   const handleEqualsClick = event => {
     setEqualsClicked(true);
     const stored = storedValue.concat(currentValue);
+    setStoredValue(stored);
+    const calculatedValue = parser.parse(storedValue).evaluate();
+    console.log(typeof calculatedValue);
     setCurrentValue(parser.parse(storedValue).evaluate());
     setStoredValue(`${stored} ${event.target.textContent}`);
   };
 
   const handleOperatorClick = event => {
     setOperatorClicked(true);
-    const stored = storedValue.concat(`${currentValue} ${event.target.textContent}`);
+    let stored;
+
+    // Have to set "/" and "*" characters for multiplication
+    // and division because with event.target.textContent values,
+    // expr-eval parser will error
+    if (event.target.textContent === "+") {
+      stored = storedValue.concat(`${currentValue} ${event.target.textContent} `);
+    } else if (event.target.textContent === "÷") {
+      stored = storedValue.concat(`${currentValue} / `);
+    } else if (event.target.textContent === "×") {
+      stored = storedValue.concat(`${currentValue} * `);
+    } else if (event.target.textContent === "-") {
+      stored = storedValue.concat(`${currentValue} ${event.target.textContent} `);
+    }
+
     setStoredValue(stored);
   };
 
