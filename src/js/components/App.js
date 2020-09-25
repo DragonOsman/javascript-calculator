@@ -214,8 +214,7 @@ const App = props => {
     const stored = storedValue.concat(currentValue);
     setStoredValue(stored);
     const calculatedValue = parser.parse(storedValue).evaluate();
-    console.log(typeof calculatedValue);
-    setCurrentValue(parser.parse(storedValue).evaluate());
+    setCurrentValue(calculatedValue.toString());
     setStoredValue(`${stored} ${event.target.textContent}`);
   };
 
@@ -260,8 +259,6 @@ const App = props => {
       handleClearEntryClick();
     } else if (event.target.name === "equals") {
       handleEqualsClick(event);
-    } else {
-      return null;
     }
   };
 
