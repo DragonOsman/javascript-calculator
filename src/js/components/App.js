@@ -211,11 +211,17 @@ const App = props => {
   const parser = new exprEval.Parser();
   const handleEqualsClick = event => {
     setEqualsClicked(true);
-    const stored = storedValue.concat(currentValue);
+    const stored = `${storedValue}${currentValue}`;
     setStoredValue(stored);
+    console.log(currentValue);
+    if (storedValue.match(/[0-9]$/) === null) {
+      setStoredValue(`${storedValue}${currentValue}`);
+      console.log(storedValue);
+    }
+    console.log(storedValue);
     const calculatedValue = parser.parse(storedValue).evaluate();
-    setCurrentValue(calculatedValue.toString());
-    setStoredValue(`${stored} ${event.target.textContent}`);
+    setCurrentValue(`${calculatedValue}`);
+    setStoredValue(`${stored}${event.target.textContent}`);
   };
 
   const handleOperatorClick = event => {
@@ -225,14 +231,33 @@ const App = props => {
     // Have to set "/" and "*" characters for multiplication
     // and division because with event.target.textContent values,
     // expr-eval parser will error
+    // And if stored value is not an empty string, append the current value
+    // and the operator to it; otherwise, just set it to the current value
+    // with the operator next to it.
     if (event.target.textContent === "+") {
-      stored = storedValue.concat(`${currentValue} ${event.target.textContent} `);
+      if (storedValue.length > 0) {
+        stored = `${storedValue}${currentValue}${event.target.textContent}`;
+      } else if (storedValue.length === 0) {
+        stored = `${currentValue}${event.target.textContent}`;
+      }
     } else if (event.target.textContent === "÷") {
-      stored = storedValue.concat(`${currentValue} / `);
+      if (storedValue.length > 0) {
+        stored = `${currentValue}${currentValue}/`;
+      } else if (storedValue.length === 0) {
+        stored = `${currentValue}/`;
+      }
     } else if (event.target.textContent === "×") {
-      stored = storedValue.concat(`${currentValue} * `);
+      if (storedValue.length > 0) {
+        stored = `${storedValue}${currentValue}*`;
+      } else if (storedValue.length === 0) {
+        stored = `${currentValue}*`;
+      }
     } else if (event.target.textContent === "-") {
-      stored = storedValue.concat(`${currentValue} ${event.target.textContent} `);
+      if (storedValue.length > 0) {
+        stored = `${storedValue}${currentValue}${event.target.textContent}`;
+      } else if (storedValue.length === 0) {
+        stored = `${currentValue}${event.target.textContent}`;
+      }
     }
 
     setStoredValue(stored);

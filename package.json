@@ -37,7 +37,16 @@
       "semi": [
         2,
         "always"
-      ]
+      ],
+      "no-debugger": "off",
+      "parserOptions": {
+        "parser": "babel",
+        "ecmaVersion": 2020,
+        "sourceType": "module",
+        "ecmaFeatures": {
+          "jsx": true
+        }
+      }
     }
   },
   "browserslist": {
