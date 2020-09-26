@@ -27,7 +27,7 @@
     "rules": {
       "prefer-const": "error",
       "yoda": "error",
-      "eqeqeq": "warn",
+      "eqeqeq": "error",
       "space-before-function-paren": "off",
       "linebreak-style": "off",
       "quotes": [
