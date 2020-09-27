@@ -210,15 +210,19 @@ const App = props => {
 
   const parser = new exprEval.Parser();
   const handleEqualsClick = event => {
-    setEqualsClicked(true);
-    const stored = `${storedValue}${currentValue}`;
-    try {
-      const calculatedValue = parser.parse(stored).evaluate();
-      setCurrentValue(`${calculatedValue}`);
-    } catch (err) {
-      console.log(`${err}`);
+    if (event.target.tagName === "BUTTON" &&
+    event.target.classList.contains("keypad-button") &&
+    event.target.classList.contains("calculation-submit")) {
+      setEqualsClicked(true);
+      const stored = `${storedValue}${currentValue}`;
+      try {
+        const calculatedValue = parser.parse(stored).evaluate();
+        setCurrentValue(`${calculatedValue}`);
+      } catch (err) {
+        console.log(`${err}`);
+      }
+      setStoredValue(stored.concat(event.target.textContent));
     }
-    setStoredValue(stored.concat(event.target.textContent));
   };
 
   const handleOperatorClick = event => {
