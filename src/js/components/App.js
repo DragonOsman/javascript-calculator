@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import exprEval from "expr-eval";
 import Keypad from "./Keypad";
 import Display from "./Display";
+import { create, all } from "mathjs";
 
 const buttons = [{
   name: "memory-clear",
@@ -191,7 +191,18 @@ const App = props => {
   const [storedValue, setStoredValue] = useState("");
   const [equalsButtonClicked, setEqualsClicked] = useState(false);
   const [operatorButtonClicked, setOperatorClicked] = useState(false);
+  const [reciprocalClicked, setReciprocalClicked] = useState(false);
 
+  const config = {
+    epsilon: 1e-12,
+    matrix: "Matrix",
+    number: "number",
+    precision: 64,
+    predictable: false,
+    randomSeed: null
+  };
+
+  const math = create(all, config);
   const handleNumberClick = event => {
     if (!operatorButtonClicked && !equalsButtonClicked) {
       const newValue = currentValue.concat(event.target.textContent);
@@ -201,6 +212,8 @@ const App = props => {
       setStoredValue("");
     } else if (operatorButtonClicked && !equalsButtonClicked) {
       setCurrentValue(event.target.textContent);
+    } else if (!operatorButtonClicked && !equalsButtonClicked && reciprocalClicked) {
+      setCurrentValue(event.target.textContent);
     }
 
     if (currentValue === "0") {
@@ -208,7 +221,6 @@ const App = props => {
     }
   };
 
-  const parser = new exprEval.Parser();
   const handleEqualsClick = event => {
     if (event.target.tagName === "BUTTON" &&
     event.target.classList.contains("keypad-button") &&
@@ -216,7 +228,7 @@ const App = props => {
       setEqualsClicked(true);
       const stored = `${storedValue}${currentValue}`;
       try {
-        const calculatedValue = parser.parse(stored).evaluate();
+        const calculatedValue = math.evaluate(stored);
         setCurrentValue(`${calculatedValue}`);
       } catch (err) {
         console.log(`${err}`);
@@ -261,9 +273,13 @@ const App = props => {
       }
     }
 
+    if (reciprocalClicked) {
+      stored = `${storedValue}${event.target.textContent}`;
+    }
+
     const prevStoredValue = stored.slice(0, stored.length - 1);
-    if (parser.parse(prevStoredValue) !== null) {
-      const calculatedValue = parser.parse(prevStoredValue).evaluate();
+    if (math.parse(prevStoredValue) !== null) {
+      const calculatedValue = math.evaluate(prevStoredValue);
       setCurrentValue(`${calculatedValue}`);
     }
 
@@ -280,15 +296,23 @@ const App = props => {
   };
 
   const handleReciprocalClick = () => {
+    setReciprocalClicked(true);
+    if (equalsButtonClicked) {
+      setStoredValue(`1/${currentValue}`);
+      const calculatedValue = math.evaluate(storedValue);
+      setCurrentValue(`${calculatedValue}`);
+    }
+
     if (storedValue.length === 0) {
-      setStoredValue(`(1/(${currentValue}))`);
-      const calculatedValue = parser.parse(storedValue).evaluate();
+      const calculationStr = `1/${currentValue}`;
+      const calculatedValue = math.evaluate(calculationStr);
       setCurrentValue(`${calculatedValue}`);
+      setStoredValue(`(1/${currentValue})`);
     } else if (storedValue.length > 0) {
-      const stored = `${storedValue}(1/(${currentValue}))`;
-      setStoredValue(stored);
-      const calculatedValue = parser.parse(storedValue).evaluate();
+      const calculatedStr = `${storedValue}(1/${currentValue})`;
+      const calculatedValue = math.evaluate(calculatedStr);
       setCurrentValue(`${calculatedValue}`);
+      setStoredValue(`${storedValue}(1${currentValue})`);
     }
   };
 
