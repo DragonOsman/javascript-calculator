@@ -212,16 +212,8 @@ const App = props => {
   const handleEqualsClick = event => {
     setEqualsClicked(true);
     const stored = `${storedValue}${currentValue}`;
-    setStoredValue(stored);
-    console.log(currentValue);
-    if (storedValue.match(/[0-9]$/) === null) {
-      setStoredValue(`${storedValue}${currentValue}`);
-      console.log(storedValue);
-    }
-    console.log(storedValue);
-    const calculatedValue = parser.parse(storedValue).evaluate();
-    setCurrentValue(`${calculatedValue}`);
     setStoredValue(`${stored}${event.target.textContent}`);
+    console.log(storedValue);
   };
 
   const handleOperatorClick = event => {
