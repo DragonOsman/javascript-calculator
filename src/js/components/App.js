@@ -279,6 +279,19 @@ const App = props => {
     setCurrentValue("0");
   };
 
+  const handleReciprocalClick = () => {
+    if (storedValue.length === 0) {
+      setStoredValue(`(1/(${currentValue}))`);
+      const calculatedValue = parser.parse(storedValue).evaluate();
+      setCurrentValue(`${calculatedValue}`);
+    } else if (storedValue.length > 0) {
+      const stored = `${storedValue}(1/(${currentValue}))`;
+      setStoredValue(stored);
+      const calculatedValue = parser.parse(storedValue).evaluate();
+      setCurrentValue(`${calculatedValue}`);
+    }
+  };
+
   const clickHandler = event => {
     if (event.target.classList.contains("keypad-button")) {
       if (event.target.name === "number-button") {
@@ -292,6 +305,8 @@ const App = props => {
         handleClearEntryClick();
       } else if (event.target.name === "equals") {
         handleEqualsClick(event);
+      } else if (event.target.name === "reciprocal-function") {
+        handleReciprocalClick();
       }
     } else {
       return null;
