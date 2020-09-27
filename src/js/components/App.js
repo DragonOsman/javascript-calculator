@@ -212,8 +212,12 @@ const App = props => {
   const handleEqualsClick = event => {
     setEqualsClicked(true);
     const stored = `${storedValue}${currentValue}`;
-    const calculatedValue = parser.parse(stored).evaluate();
-    setCurrentValue(`${calculatedValue}`);
+    try {
+      const calculatedValue = parser.parse(stored).evaluate();
+      setCurrentValue(`${calculatedValue}`);
+    } catch (err) {
+      console.log(`${err}`);
+    }
     setStoredValue(stored.concat(event.target.textContent));
   };
 
