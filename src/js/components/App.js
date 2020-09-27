@@ -8,181 +8,181 @@ const buttons = [{
   value: "MC",
   type: "memory-function",
   id: "memory-clear",
-  className: "memory-function"
+  className: "memory-function keypad-button"
 }, {
   name: "memory-recall",
   value: "MR",
   type: "memory-function",
   id: "memory-recall",
-  className: "memory-function"
+  className: "memory-function keypad-button"
 }, {
   name: "memory-add",
   value: "M+",
   type: "memory-function",
   id: "memory-add",
-  className: "memory-function"
+  className: "memory-function keypad-button"
 }, {
   name: "memory-subtract",
   value: "M-",
   type: "memory-function",
   id: "memory-subtract",
-  className: "memory-function"
+  className: "memory-function keypad-button"
 }, {
   name: "memory-store",
   value: "MS",
   type: "memory-function",
   id: "memory-store",
-  className: "memory-function"
+  className: "memory-function keypad-button"
 }, {
   name: "memory", // brings up a dropdown showing the number stored in memory
   value: "M▾",
   type: "memory-function",
   id: "memory",
-  className: "memory-function"
+  className: "memory-function keypad-button"
 }, {
   name: "percentage",
   value: "%",
   type: "function",
   id: "percentage",
-  className: "function"
+  className: "function keypad-button"
 }, {
   name: "clear-entry",
   value: "CE",
   type: "effect",
   id: "clear-entry",
-  className: "effect"
+  className: "effect keypad-button"
 }, {
   name: "clear",
   value: "C",
   type: "effect",
   id: "clear",
-  className: "effect"
+  className: "effect keypad-button"
 }, {
   name: "backspace",
   value: "\u232b",
   type: "effect",
   id: "backspace",
-  className: "effect"
+  className: "effect keypad-button"
 }, {
   name: "reciprocal-function",
   value: "1/𝑥",
   type: "function",
   id: "reciprocal",
-  className: "function"
+  className: "function keypad-button"
 }, {
   name: "square-function",
   value: "𝑥²",
   type: "function",
   id: "square",
-  className: "function"
+  className: "function keypad-button"
 }, {
   name: "square-root-function",
   value: "²√𝑥",
   type: "function",
   id: "square-root",
-  className: "function"
+  className: "function keypad-button"
 }, {
   name: "divide",
   value: "÷",
   type: "operator",
   id: "divide",
-  className: "operator"
+  className: "operator keypad-button"
 }, {
   name: "number-button",
   value: "7",
   type: "number",
   id: "seven",
-  className: "number"
+  className: "number keypad-button"
 }, {
   name: "number-button",
   value: "8",
   type: "number",
   id: "eight",
-  className: "number"
+  className: "number keypad-button"
 }, {
   name: "number-button",
   value: "9",
   type: "number",
   id: "nine",
-  className: "number"
+  className: "number keypad-button"
 }, {
   name: "multiply",
   value: "×",
   type: "operator",
   id: "multiply",
-  className: "operator"
+  className: "operator keypad-button"
 }, {
   name: "number-button",
   value: "4",
   type: "number",
   id: "four",
-  className: "number"
+  className: "number keypad-button"
 }, {
   name: "number-button",
   value: "5",
   type: "number",
   id: "five",
-  className: "number"
+  className: "number keypad-button"
 }, {
   name: "number-button",
   value: "6",
   type: "number",
   id: "six",
-  className: "number"
+  className: "number keypad-button"
 }, {
   name: "minus",
   value: "-",
   type: "operator",
   id: "subtract",
-  className: "operator"
+  className: "operator keypad-button"
 }, {
   name: "number-button",
   value: "1",
   type: "number",
   id: "one",
-  className: "number"
+  className: "number keypad-button"
 }, {
   name: "number-button",
   value: "2",
   type: "number",
   id: "two",
-  className: "number"
+  className: "number keypad-button"
 }, {
   name: "number-button",
   value: "3",
   type: "number",
   id: "three",
-  className: "number"
+  className: "number keypad-button"
 }, {
   name: "add",
   value: "+",
   type: "operator",
   id: "add",
-  className: "operator"
+  className: "operator keypad-button"
 }, {
   name: "sign-switch",
   value: "±",
   type: "effect",
   id: "sign-switch",
-  className: "number-helper"
+  className: "number-helper keypad-button"
 }, {
   name: "number-button",
   value: "0",
   type: "number",
   id: "zero",
-  className: "number"
+  className: "number keypad-button"
 }, {
   name: "decimal",
   value: ".",
   type: "effect",
   id: "decimal",
-  className: "number-helper"
+  className: "number-helper keypad-button"
 }, {
   name: "equals",
   value: "=",
   type: "calculation-submit",
   id: "equals",
-  className: "calculation-submit"
+  className: "calculation-submit keypad-button"
 }];
 
 const App = props => {
@@ -212,8 +212,9 @@ const App = props => {
   const handleEqualsClick = event => {
     setEqualsClicked(true);
     const stored = `${storedValue}${currentValue}`;
-    setStoredValue(`${stored}${event.target.textContent}`);
-    console.log(storedValue);
+    const calculatedValue = parser.parse(stored).evaluate();
+    setCurrentValue(`${calculatedValue}`);
+    setStoredValue(stored.concat(event.target.textContent));
   };
 
   const handleOperatorClick = event => {
@@ -252,6 +253,12 @@ const App = props => {
       }
     }
 
+    const prevStoredValue = stored.slice(0, stored.length - 1);
+    if (parser.parse(prevStoredValue) !== null) {
+      const calculatedValue = parser.parse(prevStoredValue).evaluate();
+      setCurrentValue(`${calculatedValue}`);
+    }
+
     setStoredValue(stored);
   };
 
@@ -265,30 +272,30 @@ const App = props => {
   };
 
   const clickHandler = event => {
-    if (event.target.name === "number-button") {
-      handleNumberClick(event);
-    } else if (event.target.name === "add" || event.target.name === "minus" ||
-    event.target.name === "multiply" || event.target.name === "divide") {
-      handleOperatorClick(event);
-    } else if (event.target.name === "clear") {
-      handleClearClick();
-    } else if (event.target.name === "clear-entry") {
-      handleClearEntryClick();
-    } else if (event.target.name === "equals") {
-      handleEqualsClick(event);
+    if (event.target.classList.contains("keypad-button")) {
+      if (event.target.name === "number-button") {
+        handleNumberClick(event);
+      } else if (event.target.name === "add" || event.target.name === "minus" ||
+      event.target.name === "multiply" || event.target.name === "divide") {
+        handleOperatorClick(event);
+      } else if (event.target.name === "clear") {
+        handleClearClick();
+      } else if (event.target.name === "clear-entry") {
+        handleClearEntryClick();
+      } else if (event.target.name === "equals") {
+        handleEqualsClick(event);
+      }
+    } else {
+      return null;
     }
   };
 
   useEffect(() => {
-    const buttons = document.getElementsByTagName("button");
-    for (const button of buttons) {
-      button.addEventListener("click", clickHandler);
-    }
+    const keypadDiv = document.getElementById("keypad");
+    keypadDiv.addEventListener("click", clickHandler);
 
     return () => {
-      for (const button of buttons) {
-        button.removeEventListener("click", clickHandler);
-      }
+      keypadDiv.removeEventListener("click", clickHandler);
     };
   });
 
@@ -298,15 +305,17 @@ const App = props => {
         storedValue={storedValue}
         currentValue={currentValue}
       />
-      {buttons.map((object, index) =>
-        <Keypad
-          key={index}
-          className={object.className}
-          id={object.id}
-          name={object.name}
-          value={object.value}
-        />
-      )}
+      <div id="keypad">
+        {buttons.map((object, index) =>
+          <Keypad
+            key={index}
+            className={object.className}
+            id={object.id}
+            name={object.name}
+            value={object.value}
+          />
+        )}
+      </div>
     </React.Fragment>
   );
 };
