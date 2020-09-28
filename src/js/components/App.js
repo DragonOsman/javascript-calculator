@@ -204,19 +204,13 @@ const App = props => {
 
   const math = create(all, config);
   const handleNumberClick = event => {
-    if (!operatorButtonClicked && !equalsButtonClicked) {
-      const newValue = currentValue.concat(event.target.textContent);
-      setCurrentValue(newValue);
-    } else if (!operatorButtonClicked && equalsButtonClicked) {
+    if (currentValue === "0") {
       setCurrentValue(event.target.textContent);
-      setStoredValue("");
-    } else if (operatorButtonClicked && !equalsButtonClicked) {
-      setCurrentValue(event.target.textContent);
-    } else if (!operatorButtonClicked && !equalsButtonClicked && reciprocalClicked) {
-      setCurrentValue(event.target.textContent);
+    } else {
+      setCurrentValue(currentValue.concat(`${event.target.textContent}`));
     }
 
-    if (currentValue === "0") {
+    if (operatorButtonClicked || equalsButtonClicked || reciprocalClicked) {
       setCurrentValue(event.target.textContent);
     }
   };
