@@ -6,20 +6,22 @@ body {
 main #root {
   width: 70%;
 }
-main #root #display-container {
+main #root #screen {
   background-color: #a9a9a9;
-  height: 50px;
-  position: relative;
 }
-main #root #display-container #formula {
+main #root #screen #formula {
   font-size: 12px;
   color: #000;
   text-align: right;
+  background-color: #a9a9a9;
+  height: 20px;
 }
-main #root #display-container #display {
+main #root #screen #display {
   font-size: 15px;
   color: #000;
   text-align: right;
+  background-color: #a9a9a9;
+  height: 30px;
 }
 
 /*# sourceMappingURL=style.css.map */

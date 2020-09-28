@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Keypad from "./Keypad";
 import Display from "./Display";
-import { create, all } from "mathjs";
+import { create, all, isNumeric } from "mathjs";
 
 const buttons = [{
   name: "memory-clear",
@@ -107,7 +107,7 @@ const buttons = [{
   className: "number keypad-button"
 }, {
   name: "multiply",
-  value: "x",
+  value: "×",
   type: "operator",
   id: "multiply",
   className: "operator keypad-button"
@@ -189,9 +189,11 @@ const App = props => {
   const [currentValue, setCurrentValue] = useState("0");
   // const [currentMemoryValue, setMemory] = useState("");
   const [storedValue, setStoredValue] = useState("");
-  const [equalsButtonClicked, setEqualsClicked] = useState(false);
-  const [operatorButtonClicked, setOperatorClicked] = useState(false);
   const [reciprocalClicked, setReciprocalClicked] = useState(false);
+  const [input, setInput] = useState([]);
+  const [lastClicked, setLastClicked] = useState("");
+  const [equalsClicked, setEqualsClicked] = useState(false);
+  const operators = ["+", "-", "÷", "×"];
 
   const config = {
     epsilon: 1e-12,
@@ -204,21 +206,51 @@ const App = props => {
 
   const math = create(all, config);
   const handleNumberClick = event => {
+    if (input.length > 0) {
+      if (input.length === 1) {
+        setLastClicked(input[0]);
+      } else if (input.length > 1) {
+        setLastClicked(input[input.length - 1]);
+      }
+    }
+    setInput([].push(event.target.textContent));
+    console.log(input);
+    input.push(event.target.textContent);
+    console.log(input);
+
+    // Check if the last button clicked before this was 0 and
+    // and the input array only has 2 elements: the number just
+    // clicked and lastClicked.
+    if (isNumeric(lastClicked)) {
+      if (lastClicked === "0" && input.length === 2) {
+        setCurrentValue(event.target.textContent);
+      } else {
+        setCurrentValue(currentValue.concat(event.target.textContent));
+      }
+    }
+
     if (currentValue === "0") {
       setCurrentValue(event.target.textContent);
     } else {
-      setCurrentValue(currentValue.concat(`${event.target.textContent}`));
+      setCurrentValue(currentValue.concat(event.target.textContent));
     }
 
-    if (operatorButtonClicked || equalsButtonClicked || reciprocalClicked) {
+    if (operators.includes(lastClicked) || reciprocalClicked) {
       setCurrentValue(event.target.textContent);
     }
+
+    if (equalsClicked) {
+      setCurrentValue(event.target.textContent);
+      setStoredValue("");
+    }
+    console.log(input);
   };
 
   const handleEqualsClick = event => {
     if (event.target.tagName === "BUTTON" &&
     event.target.classList.contains("keypad-button") &&
     event.target.classList.contains("calculation-submit")) {
+      input.push(event.target.textContent);
       setEqualsClicked(true);
       const stored = `${storedValue}${currentValue}`;
       try {
@@ -229,11 +261,23 @@ const App = props => {
       }
       setStoredValue(stored.concat(event.target.textContent));
     }
+    setInput([]);
   };
 
   const handleOperatorClick = event => {
-    setOperatorClicked(true);
     let stored;
+
+    if (input.length > 0) {
+      if (input.length === 1) {
+        setLastClicked(input[0]);
+      } else if (input.length > 1) {
+        setLastClicked(input[input.length - 1]);
+      }
+    }
+    setInput([].push(event.target.textContent));
+    console.log(input);
+    input.push(event.target.textContent);
+    console.log(input);
 
     // Have to set "/" and "*" characters for multiplication
     // and division because with event.target.textContent values,
@@ -283,16 +327,26 @@ const App = props => {
   const handleClearClick = () => {
     setStoredValue("");
     setCurrentValue("0");
+    setInput([]);
   };
 
   const handleClearEntryClick = () => {
     setCurrentValue("0");
   };
 
-  const handleReciprocalClick = () => {
+  const handleReciprocalClick = event => {
     setReciprocalClicked(true);
-    if (equalsButtonClicked) {
-      setStoredValue(`1/${currentValue}`);
+    if (input.length > 0) {
+      if (input.length === 1) {
+        setLastClicked(input[0]);
+      } else if (input.length > 1) {
+        setLastClicked(input[input.length - 1]);
+      }
+    }
+    setInput(input.push(event.target.textContent));
+
+    if (lastClicked === "=") {
+      setStoredValue(`(1/${currentValue})`);
       const calculatedValue = math.evaluate(storedValue);
       setCurrentValue(`${calculatedValue}`);
     }
@@ -324,7 +378,7 @@ const App = props => {
       } else if (event.target.name === "equals") {
         handleEqualsClick(event);
       } else if (event.target.name === "reciprocal-function") {
-        handleReciprocalClick();
+        handleReciprocalClick(event);
       }
     } else {
       return null;
