@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 
 const Display = props => {
   return (
-    <div id="display">
-      <p id="stored">{props.storedValue}</p>
+    <div id="display-container">
+      <p className="formula">{props.storedValue}</p>
       <br />
-      <p id="current">{props.currentValue}</p>
+      <p id="display">{props.currentValue}</p>
     </div>
   );
 };

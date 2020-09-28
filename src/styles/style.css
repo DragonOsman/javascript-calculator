@@ -6,17 +6,17 @@ body {
 main #root {
   width: 70%;
 }
-main #root #display {
+main #root #display-container {
   background-color: #a9a9a9;
   height: 50px;
   position: relative;
 }
-main #root #display #stored {
+main #root #display-container #formula {
   font-size: 12px;
   color: #000;
   text-align: right;
 }
-main #root #display #current {
+main #root #display-container #display {
   font-size: 15px;
   color: #000;
   text-align: right;

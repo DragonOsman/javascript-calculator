@@ -107,7 +107,7 @@ const buttons = [{
   className: "number keypad-button"
 }, {
   name: "multiply",
-  value: "×",
+  value: "x",
   type: "operator",
   id: "multiply",
   className: "operator keypad-button"
