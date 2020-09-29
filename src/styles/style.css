@@ -12,14 +12,20 @@ html {
 
 body {
   background-color: #000;
-  font-family: inherit;
 }
 
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 main #root {
-  width: 70%;
+  width: 50%;
 }
 main #root #screen {
   background-color: #a9a9a9;
+  width: 88.9%;
+  height: 130px;
 }
 main #root #screen #formula {
   font-size: 12px;
@@ -34,6 +40,23 @@ main #root #screen #display {
   text-align: right;
   background-color: #a9a9a9;
   height: 30px;
+  bottom: 0;
+  position: relative;
+}
+main #root #keypad button {
+  width: 150px;
+  height: 100px;
+  background-color: #808080;
+}
+main #root #keypad .number {
+  background-color: #fff;
+}
+main #root #keypad .memory-function {
+  width: 100px;
+  height: 100px;
+}
+main #root #keypad #equals {
+  background-color: #a62c2b;
 }
 
 /*# sourceMappingURL=style.css.map */
