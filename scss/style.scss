@@ -1,6 +1,18 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: "Open Sans", sans-serif;
+}
+
 body {
   background-color: #000;
-  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-family: inherit;
 }
 
 main {

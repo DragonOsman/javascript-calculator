@@ -213,10 +213,9 @@ const App = props => {
         setLastClicked(input[input.length - 1]);
       }
     }
-    setInput([].push(event.target.textContent));
-    console.log(input);
-    input.push(event.target.textContent);
-    console.log(input);
+    const newInput = input;
+    newInput.push(event.target.textContent);
+    setInput(newInput);
 
     // Check if the last button clicked before this was 0 and
     // and the input array only has 2 elements: the number just
@@ -239,7 +238,7 @@ const App = props => {
       setCurrentValue(event.target.textContent);
     }
 
-    if (equalsClicked) {
+    if (equalsClicked && lastClicked === "=") {
       setCurrentValue(event.target.textContent);
       setStoredValue("");
     }
@@ -250,8 +249,11 @@ const App = props => {
     if (event.target.tagName === "BUTTON" &&
     event.target.classList.contains("keypad-button") &&
     event.target.classList.contains("calculation-submit")) {
-      input.push(event.target.textContent);
       setEqualsClicked(true);
+      const newInput = input;
+      newInput.push(event.target.textContent);
+      setInput(newInput);
+
       const stored = `${storedValue}${currentValue}`;
       try {
         const calculatedValue = math.evaluate(stored);
@@ -260,8 +262,11 @@ const App = props => {
         console.log(`${err}`);
       }
       setStoredValue(stored.concat(event.target.textContent));
+
+      // remove all elements from input array except this '=' click
+      newInput.slice(-1);
+      setInput(newInput);
     }
-    setInput([]);
   };
 
   const handleOperatorClick = event => {
@@ -274,10 +279,17 @@ const App = props => {
         setLastClicked(input[input.length - 1]);
       }
     }
-    setInput([].push(event.target.textContent));
-    console.log(input);
-    input.push(event.target.textContent);
-    console.log(input);
+    const newInput = input;
+
+    // if last button clicked was another operator, have
+    // the newly clicked one replace it unless it's '-'
+    // because the next number clicked may have to become
+    // a negative number
+    if (operators.includes(lastClicked) && lastClicked !== "-") {
+      newInput.slice(0, newInput.length - 1);
+    }
+    newInput.push(event.target.textContent);
+    setInput(newInput);
 
     // Have to set "/" and "*" characters for multiplication
     // and division because with event.target.textContent values,
@@ -315,12 +327,6 @@ const App = props => {
       stored = `${storedValue}${event.target.textContent}`;
     }
 
-    const prevStoredValue = stored.slice(0, stored.length - 1);
-    if (math.parse(prevStoredValue) !== null) {
-      const calculatedValue = math.evaluate(prevStoredValue);
-      setCurrentValue(`${calculatedValue}`);
-    }
-
     setStoredValue(stored);
   };
 
@@ -343,7 +349,9 @@ const App = props => {
         setLastClicked(input[input.length - 1]);
       }
     }
-    setInput(input.push(event.target.textContent));
+    const newInput = input;
+    newInput.push(event.target.textContent);
+    setInput(newInput);
 
     if (lastClicked === "=") {
       setStoredValue(`(1/${currentValue})`);
