@@ -236,6 +236,9 @@ const App = props => {
 
     if (operators.includes(lastClicked) || reciprocalClicked) {
       setCurrentValue(event.target.textContent);
+    } else {
+      const value = `${currentValue}${event.target.textContent}`;
+      setCurrentValue(value);
     }
 
     if (equalsClicked && lastClicked === "=") {
