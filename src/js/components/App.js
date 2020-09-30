@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Keypad from "./Keypad";
 import Display from "./Display";
-import { create, all, isNumeric } from "mathjs";
+import { create, all } from "mathjs";
 
 const buttons = [{
   name: "memory-clear",
@@ -192,7 +192,6 @@ const App = props => {
   const [reciprocalClicked, setReciprocalClicked] = useState(false);
   const [input, setInput] = useState([]);
   const [lastClicked, setLastClicked] = useState("");
-  const [equalsClicked, setEqualsClicked] = useState(false);
   const operators = ["+", "-", "÷", "×"];
 
   const config = {
@@ -217,14 +216,13 @@ const App = props => {
     newInput.push(event.target.textContent);
     setInput(newInput);
 
-    if (equalsClicked && lastClicked === "=") {
+    if (currentValue === "0" && event.target.textContent === "0") {
+      return null;
+    } else if (currentValue === "0" || lastClicked === "=") {
       setCurrentValue(event.target.textContent);
-      setStoredValue("");
-    }
-
-    if (currentValue === "0" && event.target.textContent !== "0") {
+    } else if (operators.includes(lastClicked) || reciprocalClicked) {
       setCurrentValue(event.target.textContent);
-    } else if ((isNumeric(lastClicked) && currentValue !== "0") || lastClicked === ".") {
+    } else {
       setCurrentValue(currentValue.concat(event.target.textContent));
     }
   };
@@ -233,7 +231,6 @@ const App = props => {
     if (event.target.tagName === "BUTTON" &&
     event.target.classList.contains("keypad-button") &&
     event.target.classList.contains("calculation-submit")) {
-      setEqualsClicked(true);
       const newInput = input;
       newInput.push(event.target.textContent);
       setInput(newInput);
