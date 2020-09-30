@@ -47,6 +47,7 @@ main #root #keypad button {
   width: 150px;
   height: 100px;
   background-color: #808080;
+  font-weight: bold;
 }
 main #root #keypad .number {
   background-color: #fff;
@@ -55,8 +56,14 @@ main #root #keypad .memory-function {
   width: 100px;
   height: 100px;
 }
+main #root #keypad #memory {
+  height: 97px;
+}
 main #root #keypad #equals {
   background-color: #a62c2b;
+}
+main #root #keypad #decimal, main #root #keypad #sign-switch {
+  background-color: #fff;
 }
 
 /*# sourceMappingURL=style.css.map */

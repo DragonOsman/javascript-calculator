@@ -217,35 +217,22 @@ const App = props => {
     newInput.push(event.target.textContent);
     setInput(newInput);
 
-    // Check if the last button clicked before this was 0 and
-    // and the input array only has 2 elements: the number just
-    // clicked and lastClicked.
-    if (isNumeric(lastClicked)) {
-      if (lastClicked === "0" && input.length === 2) {
-        setCurrentValue(event.target.textContent);
-      } else {
-        setCurrentValue(currentValue.concat(event.target.textContent));
-      }
-    }
-
-    if (currentValue === "0") {
-      setCurrentValue(event.target.textContent);
-    } else {
-      setCurrentValue(currentValue.concat(event.target.textContent));
-    }
-
-    if (operators.includes(lastClicked) || reciprocalClicked) {
-      setCurrentValue(event.target.textContent);
-    } else {
-      const value = `${currentValue}${event.target.textContent}`;
-      setCurrentValue(value);
-    }
-
     if (equalsClicked && lastClicked === "=") {
       setCurrentValue(event.target.textContent);
       setStoredValue("");
     }
-    console.log(input);
+
+    if (currentValue === "0" && event.target.textContent !== "0") {
+      setCurrentValue(event.target.textContent);
+    } else if (currentValue !== "0" && !operators.includes(lastClicked)) {
+      setCurrentValue(currentValue.concat(event.target.textContent));
+    } else if (operators.includes(lastClicked)) {
+      setCurrentValue(event.target.textContent);
+    }
+
+    if (isNumeric(lastClicked) && currentValue !== "0") {
+      setCurrentValue(currentValue.concat(event.target.textContent));
+    }
   };
 
   const handleEqualsClick = event => {
@@ -296,7 +283,7 @@ const App = props => {
 
     // Have to set "/" and "*" characters for multiplication
     // and division because with event.target.textContent values,
-    // expr-eval parser will error
+    // math parser library will error
     // And if stored value is not an empty string, append the current value
     // and the operator to it; otherwise, just set it to the current value
     // with the operator next to it.
@@ -328,6 +315,10 @@ const App = props => {
 
     if (reciprocalClicked) {
       stored = `${storedValue}${event.target.textContent}`;
+    }
+
+    if (lastClicked === "=") {
+      stored = `${storedValue}${currentValue}${event.target.textContent}`;
     }
 
     setStoredValue(stored);
@@ -375,6 +366,25 @@ const App = props => {
     }
   };
 
+  const handleDecimalClick = event => {
+    if (input.length > 0) {
+      if (input.length === 1) {
+        setLastClicked(input[0]);
+      } else if (input.length > 1) {
+        setLastClicked(input[input.length - 1]);
+      }
+    }
+    const newInput = input;
+    newInput.push(event.target.textContent);
+    setInput(newInput);
+
+    if (lastClicked === ".") {
+      return null;
+    } else {
+      setCurrentValue(currentValue.concat(event.target.textContent));
+    }
+  };
+
   const clickHandler = event => {
     if (event.target.classList.contains("keypad-button")) {
       if (event.target.name === "number-button") {
@@ -390,6 +400,8 @@ const App = props => {
         handleEqualsClick(event);
       } else if (event.target.name === "reciprocal-function") {
         handleReciprocalClick(event);
+      } else if (event.target.name === "decimal") {
+        handleDecimalClick(event);
       }
     } else {
       return null;

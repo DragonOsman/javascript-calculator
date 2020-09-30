@@ -51,6 +51,7 @@ main {
         width: 150px;
         height: 100px;
         background-color: #808080;
+        font-weight: bold;
       }
 
       .number {
@@ -62,8 +63,16 @@ main {
         height: 100px;
       }
 
+      #memory {
+        height: 97px;
+      }
+
       #equals {
         background-color: #a62c2b
+      }
+
+      #decimal, #sign-switch {
+        background-color: #fff;
       }
     }
   }
