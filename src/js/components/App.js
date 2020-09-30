@@ -179,10 +179,10 @@ const App = props => {
     newInput.push(event.target.textContent);
     setInput(newInput);
 
-    if ((currentValue !== "0" && event.target.textContent !== "0") || !isNumeric(lastClicked) ||
-        lastClicked === "=" || reciprocalClicked) {
+    if (currentValue === "0" || reciprocalClicked ||
+      operators.includes(lastClicked) || lastClicked === "=") {
       setCurrentValue(event.target.textContent);
-    } else if (isNumeric(lastClicked) && !operators.includes(lastClicked)) {
+    } else if (isNumeric(lastClicked)) {
       setCurrentValue(currentValue.concat(event.target.textContent));
     }
   };
