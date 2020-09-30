@@ -4,42 +4,6 @@ import Display from "./Display";
 import { create, all, isNumeric } from "mathjs";
 
 const buttons = [{
-  name: "memory-clear",
-  value: "MC",
-  type: "memory-function",
-  id: "memory-clear",
-  className: "memory-function keypad-button"
-}, {
-  name: "memory-recall",
-  value: "MR",
-  type: "memory-function",
-  id: "memory-recall",
-  className: "memory-function keypad-button"
-}, {
-  name: "memory-add",
-  value: "M+",
-  type: "memory-function",
-  id: "memory-add",
-  className: "memory-function keypad-button"
-}, {
-  name: "memory-subtract",
-  value: "M-",
-  type: "memory-function",
-  id: "memory-subtract",
-  className: "memory-function keypad-button"
-}, {
-  name: "memory-store",
-  value: "MS",
-  type: "memory-function",
-  id: "memory-store",
-  className: "memory-function keypad-button"
-}, {
-  name: "memory", // brings up a dropdown showing the number stored in memory
-  value: "M▾",
-  type: "memory-function",
-  id: "memory",
-  className: "memory-function keypad-button"
-}, {
   name: "percentage",
   value: "%",
   type: "function",
@@ -187,7 +151,6 @@ const buttons = [{
 
 const App = props => {
   const [currentValue, setCurrentValue] = useState("0");
-  // const [currentMemoryValue, setMemory] = useState("");
   const [storedValue, setStoredValue] = useState("");
   const [reciprocalClicked, setReciprocalClicked] = useState(false);
   const [input, setInput] = useState([]);
@@ -216,12 +179,10 @@ const App = props => {
     newInput.push(event.target.textContent);
     setInput(newInput);
 
-    if (currentValue === "0" && event.target.textContent === "0") {
-      return null;
-    } else if (currentValue === "0" || lastClicked === "=" ||
-        operators.includes(lastClicked) || reciprocalClicked) {
+    if ((currentValue !== "0" && event.target.textContent !== "0") || !isNumeric(lastClicked) ||
+        lastClicked === "=" || reciprocalClicked) {
       setCurrentValue(event.target.textContent);
-    } else if (isNumeric(lastClicked)) {
+    } else if (isNumeric(lastClicked) && !operators.includes(lastClicked)) {
       setCurrentValue(currentValue.concat(event.target.textContent));
     }
   };
@@ -308,7 +269,7 @@ const App = props => {
     }
 
     if (lastClicked === "=") {
-      stored = `${storedValue}${currentValue}${event.target.textContent}`;
+      stored = `${currentValue}${event.target.textContent}`;
     }
 
     setStoredValue(stored);

@@ -24,14 +24,14 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
   & #root {
     width: 50%;
     
     & #screen {
       background-color: #a9a9a9;
       width: 88.9%;
-      height: 130px;
+      height: 100px;
 
       & #formula {
         font-size: 12px;
@@ -62,15 +62,6 @@ main {
 
       .number {
         background-color: #fff;
-      }
-
-      .memory-function {
-        width: 100px;
-        height: 100px;
-      }
-
-      #memory {
-        height: 97px;
       }
 
       #equals {
