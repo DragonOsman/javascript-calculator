@@ -220,14 +220,15 @@ const App = props => {
     if (equalsClicked && lastClicked === "=") {
       setCurrentValue(event.target.textContent);
       setStoredValue("");
+    } else if (operators.includes(lastClicked)) {
+      setCurrentValue(event.target.textContent);
+      setStoredValue(storedValue.concat(event.target.textContent));
     }
 
     if (currentValue === "0" && event.target.textContent !== "0") {
       setCurrentValue(event.target.textContent);
     } else if (currentValue !== "0" && !operators.includes(lastClicked)) {
       setCurrentValue(currentValue.concat(event.target.textContent));
-    } else if (operators.includes(lastClicked)) {
-      setCurrentValue(event.target.textContent);
     }
 
     if (isNumeric(lastClicked) && currentValue !== "0") {
@@ -322,6 +323,7 @@ const App = props => {
     }
 
     setStoredValue(stored);
+    console.log(input);
   };
 
   const handleClearClick = () => {
