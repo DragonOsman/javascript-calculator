@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Keypad from "./Keypad";
 import Display from "./Display";
-import { create, all } from "mathjs";
+import { create, all, isNumeric } from "mathjs";
 
 const buttons = [{
   name: "memory-clear",
@@ -218,11 +218,10 @@ const App = props => {
 
     if (currentValue === "0" && event.target.textContent === "0") {
       return null;
-    } else if (currentValue === "0" || lastClicked === "=") {
+    } else if (currentValue === "0" || lastClicked === "=" ||
+        operators.includes(lastClicked) || reciprocalClicked) {
       setCurrentValue(event.target.textContent);
-    } else if (operators.includes(lastClicked) || reciprocalClicked) {
-      setCurrentValue(event.target.textContent);
-    } else {
+    } else if (isNumeric(lastClicked)) {
       setCurrentValue(currentValue.concat(event.target.textContent));
     }
   };
