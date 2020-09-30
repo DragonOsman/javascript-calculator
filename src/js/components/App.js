@@ -220,18 +220,11 @@ const App = props => {
     if (equalsClicked && lastClicked === "=") {
       setCurrentValue(event.target.textContent);
       setStoredValue("");
-    } else if (operators.includes(lastClicked)) {
-      setCurrentValue(event.target.textContent);
-      setStoredValue(storedValue.concat(event.target.textContent));
     }
 
     if (currentValue === "0" && event.target.textContent !== "0") {
       setCurrentValue(event.target.textContent);
-    } else if (currentValue !== "0" && !operators.includes(lastClicked)) {
-      setCurrentValue(currentValue.concat(event.target.textContent));
-    }
-
-    if (isNumeric(lastClicked) && currentValue !== "0") {
+    } else if ((isNumeric(lastClicked) && currentValue !== "0") || lastClicked === ".") {
       setCurrentValue(currentValue.concat(event.target.textContent));
     }
   };
@@ -380,9 +373,7 @@ const App = props => {
     newInput.push(event.target.textContent);
     setInput(newInput);
 
-    if (lastClicked === ".") {
-      return null;
-    } else {
+    if (!currentValue.includes(event.target.textContent) && lastClicked !== event.target.textContent) {
       setCurrentValue(currentValue.concat(event.target.textContent));
     }
   };
