@@ -179,11 +179,14 @@ const App = props => {
     newInput.push(event.target.textContent);
     setInput(newInput);
 
-    if (currentValue === "0" || reciprocalClicked ||
-      operators.includes(lastClicked) || lastClicked === "=") {
+    if (isNumeric(lastClicked)) {
+      const value = `${currentValue}${event.target.textContent}`;
+      setCurrentValue(value);
+    }
+
+    if (currentValue === "0" || operators.includes(lastClicked) ||
+        lastClicked === "=" || lastClicked === "1/𝑥") {
       setCurrentValue(event.target.textContent);
-    } else if (isNumeric(lastClicked)) {
-      setCurrentValue(currentValue.concat(event.target.textContent));
     }
   };
 
@@ -231,6 +234,7 @@ const App = props => {
     }
     newInput.push(event.target.textContent);
     setInput(newInput);
+    console.log(lastClicked);
 
     // Have to set "/" and "*" characters for multiplication
     // and division because with event.target.textContent values,
@@ -268,11 +272,8 @@ const App = props => {
       stored = `${storedValue}${event.target.textContent}`;
     }
 
-    if (lastClicked === "=") {
-      stored = `${currentValue}${event.target.textContent}`;
-    }
-
     setStoredValue(stored);
+
     console.log(input);
   };
 
