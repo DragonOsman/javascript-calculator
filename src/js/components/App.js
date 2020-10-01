@@ -179,13 +179,9 @@ const App = props => {
     newInput.push(event.target.textContent);
     setInput(newInput);
 
-    if (isNumeric(lastClicked)) {
-      const value = `${currentValue}${event.target.textContent}`;
-      setCurrentValue(value);
-    }
-
-    if (currentValue === "0" || operators.includes(lastClicked) ||
-        lastClicked === "=" || lastClicked === "1/𝑥") {
+    if (isNumeric(lastClicked) && currentValue !== "0") {
+      setCurrentValue(currentValue.concat(event.target.textContent));
+    } else {
       setCurrentValue(event.target.textContent);
     }
   };
