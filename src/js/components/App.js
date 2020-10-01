@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Keypad from "./Keypad";
 import Display from "./Display";
-import { create, all, isNumeric } from "mathjs";
+import { create, all } from "mathjs";
 
 const buttons = [{
   name: "percentage",
@@ -179,9 +179,25 @@ const App = props => {
     newInput.push(event.target.textContent);
     setInput(newInput);
 
-    if (isNumeric(lastClicked) && currentValue !== "0") {
+    if (!isNaN(lastClicked) && currentValue !== "0") {
       setCurrentValue(currentValue.concat(event.target.textContent));
-    } else {
+    }
+
+    if (operators.includes(lastClicked)) {
+      console.log(`lastClicked is ${lastClicked}`);
+      setCurrentValue(event.target.textContent);
+    }
+
+    if (lastClicked === "=") {
+      setStoredValue("");
+      setCurrentValue(event.target.textContent);
+    }
+
+    if (lastClicked === "1/𝑥") {
+      setCurrentValue(event.target.textContent);
+    }
+
+    if (currentValue === "0") {
       setCurrentValue(event.target.textContent);
     }
   };
@@ -230,7 +246,6 @@ const App = props => {
     }
     newInput.push(event.target.textContent);
     setInput(newInput);
-    console.log(lastClicked);
 
     // Have to set "/" and "*" characters for multiplication
     // and division because with event.target.textContent values,
@@ -269,8 +284,6 @@ const App = props => {
     }
 
     setStoredValue(stored);
-
-    console.log(input);
   };
 
   const handleClearClick = () => {
