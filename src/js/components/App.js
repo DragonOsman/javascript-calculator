@@ -153,8 +153,7 @@ const App = props => {
   const [currentValue, setCurrentValue] = useState("0");
   const [storedValue, setStoredValue] = useState("");
   const [reciprocalClicked, setReciprocalClicked] = useState(false);
-  const [equalsClicked, setEqualsClicked] = useState(false);
-  const operators = ["+", "-", "/", "*"];
+  const [input, setInput] = useState([]);
 
   const config = {
     epsilon: 1e-12,
@@ -167,56 +166,77 @@ const App = props => {
 
   const math = create(all, config);
   const handleNumberClick = event => {
-    if (event.target.textContent === "0" && currentValue === "0") {
+    if (currentValue === "0" && event.target.textContent === "0") {
+      return null;
+    } else if (currentValue === "0" && event.target.textContent !== "0") {
       setCurrentValue(event.target.textContent);
+    } else if (currentValue !== "0") {
+      setCurrentValue(`${currentValue}${event.target.textContent}`);
     }
 
-    if (currentValue !== "0") {
-      setCurrentValue(`${currentValue}${event.target.textContent}`);
-    } else if (operators.includes(storedValue[storedValue.length - 1]) || reciprocalClicked) {
-      setCurrentValue(event.target.textContent);
-    } else if (equalsClicked) {
-      setStoredValue("");
-      setCurrentValue(event.target.textContent);
+    if (input.length > 0) {
+      if (input[input.length - 1] === "+" || input[input.length - 1] === "-" ||
+      input[input.length - 1] === "/" || input[input.length - 1] === "*") {
+        setCurrentValue(event.target.textContent);
+      } else if (input[input.length - 1] === "=") {
+        setStoredValue("");
+        setCurrentValue(event.target.textContent);
+      } else if (input[input.length - 1] === "1/𝑥" || reciprocalClicked) {
+        setCurrentValue(event.target.textContent);
+      }
     }
+
+    const newInput = input;
+    newInput.push(event.target.textContent);
+    setInput(input);
   };
 
   const handleEqualsClick = event => {
-    if (event.target.tagName === "BUTTON" &&
-    event.target.classList.contains("keypad-button") &&
-    event.target.classList.contains("calculation-submit")) {
-      setEqualsClicked(true);
-      const stored = `${storedValue}${currentValue}`;
-      try {
-        const calculatedValue = math.evaluate(stored);
-        setCurrentValue(`${calculatedValue}`);
-      } catch (err) {
-        console.log(`${err}`);
-      }
-
-      setStoredValue(`${stored}${event.target.textContent}`);
+    if (event.target.name !== "equals" && event.target.textContent !== "=" &&
+    event.target.id !== "equals" && event.target.tagName !== "BUTTON") {
+      return null;
     }
+
+    const stored = `${storedValue}${currentValue}`;
+    try {
+      const calculatedValue = math.evaluate(stored);
+      setCurrentValue(`${calculatedValue}`);
+    } catch (err) {
+      console.log(`Error occurred: ${err}`);
+    }
+
+    setStoredValue(`${stored}${event.target.textContent}`);
+
+    // erase all values from input array except this "=" click
+    const newInput = input;
+    input.slice(0, input.length);
+    newInput.push(event.target.textContent);
+    setInput(newInput);
   };
 
   const handleOperatorClick = event => {
-    if (reciprocalClicked) {
-      setStoredValue(`${storedValue}${event.target.textContent}`);
-    } else if (equalsClicked) {
-      setStoredValue(`${currentValue}${event.target.textContent}`);
+    // Have to use latest operator inputted,
+    // if we have more than one; except for "-"
+    // because that can be used for negative values
+    if (input.length > 0) {
+      if (input[input.length - 1] === "+" || input[input.length - 1] === "*" ||
+      input[input.length - 1] === "/") {
+        const stored = storedValue.slice(-1);
+        setStoredValue(stored);
+      } else if (input[input.length - 1] === "=") {
+        const stored = `${currentValue}${event.target.textContent}`;
+        setStoredValue(stored);
+      } else if (input[input.length - 1] === "1/𝑥" || reciprocalClicked) {
+        const stored = `${storedValue}${event.target.textContent}`;
+        setStoredValue(stored);
+      }
     }
 
-    // if stored ends with an operator already, except -
-    // (for negative values) remove that last substring
-    if (storedValue.endsWith("+") || storedValue.endsWith("/") ||
-        storedValue.endsWith("*")) {
-      storedValue.slice(-1);
-    }
+    setStoredValue(`${currentValue}${event.target.textContent}`);
 
-    if (storedValue !== "") {
-      setStoredValue(`${storedValue}${event.target.textContent}`);
-    } else if (storedValue === "") {
-      setStoredValue(`${currentValue}${event.target.textContent}`);
-    }
+    const newInput = input;
+    newInput.push(event.target.textContent);
+    setInput(newInput);
   };
 
   const handleClearClick = () => {
@@ -230,30 +250,32 @@ const App = props => {
 
   const handleReciprocalClick = event => {
     setReciprocalClicked(true);
-
-    if (equalsClicked) {
+    if (storedValue === "") {
       setStoredValue(`(1/${currentValue})`);
-      const calculatedValue = math.evaluate(storedValue);
-      setCurrentValue(`${calculatedValue}`);
+    } else if (storedValue !== "") {
+      setStoredValue(`${storedValue}(1/${currentValue})`);
     }
 
-    if (storedValue.length === 0) {
-      const calculationStr = `1/${currentValue}`;
-      const calculatedValue = math.evaluate(calculationStr);
-      setCurrentValue(`${calculatedValue}`);
-      setStoredValue(`(1/${currentValue})`);
-    } else if (storedValue.length > 0) {
-      const calculatedStr = `${storedValue}(1/${currentValue})`;
-      const calculatedValue = math.evaluate(calculatedStr);
-      setCurrentValue(`${calculatedValue}`);
-      setStoredValue(`${storedValue}(1${currentValue})`);
+    try {
+      const calculatedValue = math.evaluate(`1/${currentValue}`);
+      setCurrentValue(calculatedValue);
+    } catch (err) {
+      console.log(`Error: ${err}`);
     }
+
+    const newInput = input;
+    newInput.push(event.target.textContent);
+    setInput(input);
   };
 
   const handleDecimalClick = event => {
     if (!currentValue.includes(event.target.textContent)) {
       setCurrentValue(currentValue.concat(event.target.textContent));
     }
+
+    const newInput = input;
+    newInput.push(event.target.textContent);
+    setInput(input);
   };
 
   const clickHandler = event => {
