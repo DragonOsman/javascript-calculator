@@ -226,15 +226,18 @@ const App = props => {
       } else if (input[input.length - 1] === "1/𝑥" || reciprocalClicked) {
         const stored = `${storedValue}${event.target.textContent}`;
         setStoredValue(stored);
+      } else if (input[input.length - 1] === "+" || input[input.length - 1] === "-" ||
+          input[input.length - 1] === "*" || input[input.length - 1] === "/") {
+        if (event.target.textContent !== "-") {
+          if (storedValue.endsWith("+") || storedValue.endsWith("*") ||
+          storedValue.endsWith("/") || storedValue.endsWith("-")) {
+            setStoredValue(`${storedValue}${event.target.textContent}`);
+          }
+        }
       }
     }
 
-    if (storedValue.endsWith("+") || storedValue.endsWith("-") ||
-        storedValue.endsWith("*") || storedValue.endsWith("/")) {
-      setStoredValue(`${storedValue}${event.target.textContent}`);
-    } else {
-      setStoredValue(`${storedValue}${currentValue}${event.target.textContent}`);
-    }
+    setStoredValue(`${storedValue}${currentValue}${event.target.textContent}`);
 
     const newInput = input;
     newInput.push(event.target.textContent);
