@@ -219,13 +219,8 @@ const App = props => {
     // if we have more than one; except for "-"
     // because that can be used for negative values
     if (input.length > 0) {
-      if (input[input.length - 1] === "+" || input[input.length - 1] === "*" ||
-      input[input.length - 1] === "/" || input[input.length - 1] === "/") {
-        if (event.target.textContent !== "-") {
-          const stored = storedValue.slice(-1);
-          setStoredValue(stored);
-        }
-      } else if (input[input.length - 1] === "=") {
+      if (input[input.length - 1] === "=") {
+        setStoredValue("");
         const stored = `${currentValue}${event.target.textContent}`;
         setStoredValue(stored);
       } else if (input[input.length - 1] === "1/𝑥" || reciprocalClicked) {
@@ -234,7 +229,12 @@ const App = props => {
       }
     }
 
-    setStoredValue(`${currentValue}${event.target.textContent}`);
+    if (storedValue.endsWith("+") || storedValue.endsWith("-") ||
+        storedValue.endsWith("*") || storedValue.endsWith("/")) {
+      setStoredValue(`${storedValue}${event.target.textContent}`);
+    } else {
+      setStoredValue(`${storedValue}${currentValue}${event.target.textContent}`);
+    }
 
     const newInput = input;
     newInput.push(event.target.textContent);
