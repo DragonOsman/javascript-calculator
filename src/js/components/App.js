@@ -220,9 +220,11 @@ const App = props => {
     // because that can be used for negative values
     if (input.length > 0) {
       if (input[input.length - 1] === "+" || input[input.length - 1] === "*" ||
-      input[input.length - 1] === "/") {
-        const stored = storedValue.slice(-1);
-        setStoredValue(stored);
+      input[input.length - 1] === "/" || input[input.length - 1] === "/") {
+        if (event.target.textContent !== "-") {
+          const stored = storedValue.slice(-1);
+          setStoredValue(stored);
+        }
       } else if (input[input.length - 1] === "=") {
         const stored = `${currentValue}${event.target.textContent}`;
         setStoredValue(stored);
