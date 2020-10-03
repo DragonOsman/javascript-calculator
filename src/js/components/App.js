@@ -179,7 +179,6 @@ const App = props => {
       input[input.length - 1] === "/" || input[input.length - 1] === "*") {
         setCurrentValue(event.target.textContent);
       } else if (input[input.length - 1] === "=") {
-        setStoredValue("");
         setCurrentValue(event.target.textContent);
       } else if (input[input.length - 1] === "1/𝑥" || reciprocalClicked) {
         setCurrentValue(event.target.textContent);
@@ -189,6 +188,7 @@ const App = props => {
     const newInput = input;
     newInput.push(event.target.textContent);
     setInput(input);
+    setStoredValue(input.join(""));
   };
 
   const handleEqualsClick = event => {
@@ -197,7 +197,7 @@ const App = props => {
       return null;
     }
 
-    const stored = `${storedValue}${currentValue}`;
+    const stored = storedValue;
     try {
       const calculatedValue = math.evaluate(stored);
       setCurrentValue(`${calculatedValue}`);
@@ -205,61 +205,70 @@ const App = props => {
       console.log(`Error occurred: ${err}`);
     }
 
-    setStoredValue(`${stored}${event.target.textContent}`);
-
-    // erase all values from input array except this "=" click
     const newInput = input;
-    input.slice(0, input.length);
     newInput.push(event.target.textContent);
     setInput(newInput);
+    setStoredValue(input.join(""));
+
+    // empty the input array except for this "=" click
+    setInput(["="]);
   };
 
   const handleOperatorClick = event => {
-    // Have to use latest operator inputted,
-    // if we have more than one; except for "-"
-    // because that can be used for negative values
     if (input.length > 0) {
+      // if "=" was clicked, we haeve to use the result from the previous
+      // calculation for a new one now
       if (input[input.length - 1] === "=") {
+        // reset storedValue and the input array to default values
         setStoredValue("");
-        const stored = `${currentValue}${event.target.textContent}`;
-        setStoredValue(stored);
+        const newInput = [];
+        setInput(newInput);
+
+        // set input array and storedValue to equal the result from the
+        // previous calculation with the operator that was clicked appended to it
+        newInput.push(currentValue);
+        newInput.push(event.target.textContent);
+        setInput(newInput);
+        setStoredValue(input.join(""));
+        console.log(input);
       } else if (input[input.length - 1] === "1/𝑥" || reciprocalClicked) {
-        const stored = `${storedValue}${event.target.textContent}`;
-        setStoredValue(stored);
-      } else if (input[input.length - 1] === "+" || input[input.length - 1] === "-" ||
-          input[input.length - 1] === "*" || input[input.length - 1] === "/") {
-        if (event.target.textContent !== "-") {
-          if (storedValue.endsWith("+") || storedValue.endsWith("*") ||
-          storedValue.endsWith("/") || storedValue.endsWith("-")) {
-            setStoredValue(`${storedValue}${event.target.textContent}`);
-          }
-        }
+        const newInput = input;
+        newInput.push(event.target.textContent);
+        setInput(newInput);
+        setStoredValue(input.join(""));
       }
     }
-
-    setStoredValue(`${storedValue}${currentValue}${event.target.textContent}`);
 
     const newInput = input;
     newInput.push(event.target.textContent);
     setInput(newInput);
+    setStoredValue(input.join(""));
   };
 
   const handleClearClick = () => {
-    setStoredValue("");
     setCurrentValue("0");
+    setStoredValue("");
+    setInput([]);
   };
 
   const handleClearEntryClick = () => {
     setCurrentValue("0");
   };
 
+  const handleBackSpaceClick = () => {
+    if (currentValue.length === 1) {
+      setCurrentValue("0");
+    } else if (currentValue.length > 1) {
+      // set currentValue to a string with the last element cut off
+      const newValue = currentValue.slice(0, currentValue.length - 1);
+      setCurrentValue(newValue);
+    }
+  };
+
   const handleReciprocalClick = event => {
     setReciprocalClicked(true);
-    if (storedValue === "") {
-      setStoredValue(`(1/${currentValue})`);
-    } else if (storedValue !== "") {
-      setStoredValue(`${storedValue}(1/${currentValue})`);
-    }
+    const newInput = input;
+    newInput.push(`(1/${currentValue})`);
 
     try {
       const calculatedValue = math.evaluate(`1/${currentValue}`);
@@ -268,19 +277,21 @@ const App = props => {
       console.log(`Error: ${err}`);
     }
 
-    const newInput = input;
-    newInput.push(event.target.textContent);
     setInput(input);
+    setStoredValue(input.join(""));
   };
 
   const handleDecimalClick = event => {
     if (!currentValue.includes(event.target.textContent)) {
       setCurrentValue(currentValue.concat(event.target.textContent));
+      const newInput = input;
+      if (currentValue === "0.") {
+        newInput.push(currentValue.charAt(0));
+      }
+      newInput.push(event.target.textContent);
+      setInput(newInput);
+      setStoredValue(input.join(""));
     }
-
-    const newInput = input;
-    newInput.push(event.target.textContent);
-    setInput(input);
   };
 
   const clickHandler = event => {
@@ -300,6 +311,8 @@ const App = props => {
         handleReciprocalClick(event);
       } else if (event.target.name === "decimal") {
         handleDecimalClick(event);
+      } else if (event.target.name === "backspace") {
+        handleBackSpaceClick();
       }
     } else {
       return null;
