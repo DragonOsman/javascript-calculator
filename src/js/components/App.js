@@ -153,35 +153,27 @@ const App = props => {
   const [currentValue, setCurrentValue] = useState("0");
   const [storedValue, setStoredValue] = useState("");
   const [reciprocalClicked, setReciprocalClicked] = useState(false);
+  const [equalsClicked, setEqualsClicked] = useState(false);
   const [input, setInput] = useState([]);
+  const operators = ["+", "-", "*", "/"];
 
-  const config = {
-    epsilon: 1e-12,
-    matrix: "Matrix",
-    number: "number",
-    precision: 64,
-    predictable: false,
-    randomSeed: null
-  };
-
-  const math = create(all, config);
   const handleNumberClick = event => {
     if (currentValue === "0" && event.target.textContent === "0") {
       return null;
-    } else if (currentValue === "0" && event.target.textContent !== "0") {
+    } else if ((currentValue === "0" && event.target.textContent !== "0") ||
+    equalsClicked) {
       setCurrentValue(event.target.textContent);
-    } else if (currentValue !== "0") {
-      setCurrentValue(`${currentValue}${event.target.textContent}`);
+
+      // reset it to make sure other click handlers don't misunderstand
+      setReciprocalClicked(false);
+      setEqualsClicked(false);
     }
 
     if (input.length > 0) {
-      if (input[input.length - 1] === "+" || input[input.length - 1] === "-" ||
-      input[input.length - 1] === "/" || input[input.length - 1] === "*") {
+      if (operators.includes(input[input.length - 1])) {
         setCurrentValue(event.target.textContent);
-      } else if (input[input.length - 1] === "=") {
-        setCurrentValue(event.target.textContent);
-      } else if (input[input.length - 1] === "1/𝑥" || reciprocalClicked) {
-        setCurrentValue(event.target.textContent);
+      } else if (!isNaN(input[input.length - 1]) || input[input.length - 1] === ".") {
+        setCurrentValue(`${currentValue}${event.target.textContent}`);
       }
     }
 
@@ -197,46 +189,61 @@ const App = props => {
       return null;
     }
 
+    setEqualsClicked(true);
+
+    const config = {
+      epsilon: 1e-12,
+      matrix: "Matrix",
+      number: "number",
+      precision: 64,
+      predictable: false,
+      randomSeed: null
+    };
+    const math = create(all, config);
+
     const stored = storedValue;
     try {
-      const calculatedValue = math.evaluate(stored);
+      const calculatedValue = math.round(1000000000000 * math.evaluate(stored)) / 1000000000000;
       setCurrentValue(`${calculatedValue}`);
     } catch (err) {
       console.log(`Error occurred: ${err}`);
     }
 
     const newInput = input;
-    newInput.push(event.target.textContent);
+    newInput.length = 0;
     setInput(newInput);
-    setStoredValue(input.join(""));
-
-    // empty the input array except for this "=" click
-    setInput(["="]);
+    setStoredValue(`${stored}${event.target.textContent}`);
   };
 
   const handleOperatorClick = event => {
     if (input.length > 0) {
-      // if "=" was clicked, we haeve to use the result from the previous
-      // calculation for a new one now
-      if (input[input.length - 1] === "=") {
-        // reset storedValue and the input array to default values
-        setStoredValue("");
-        const newInput = [];
-        setInput(newInput);
-
-        // set input array and storedValue to equal the result from the
-        // previous calculation with the operator that was clicked appended to it
-        newInput.push(currentValue);
-        newInput.push(event.target.textContent);
-        setInput(newInput);
-        setStoredValue(input.join(""));
-        console.log(input);
-      } else if (input[input.length - 1] === "1/𝑥" || reciprocalClicked) {
+      // handle 2 or more operators clicked in a row
+      if (operators.includes(input[input.length - 1]) && event.target.textContent !== "-") {
+        // take the previously clicked operator out of the input array
         const newInput = input;
-        newInput.push(event.target.textContent);
+        newInput.splice(-1, 1);
         setInput(newInput);
-        setStoredValue(input.join(""));
       }
+    }
+
+    // take the result of the previous evaluation for a new calculation
+    if (equalsClicked) {
+      // This means equals button was clicked (can be like this in other cases too but still)
+      // set input array and storedValue to equal the result from the
+      // previous calculation
+      const newInput = input;
+      newInput.push(currentValue);
+      setInput(newInput);
+
+      // reset to false to make sure other click handlers don't misunderstand
+      setEqualsClicked(false);
+    } else if (reciprocalClicked) {
+      const newInput = input;
+      newInput.push(event.target.textContent);
+      setInput(newInput);
+
+      // reset to false to make sure other click handlers don't misunderstand
+      setReciprocalClicked(false);
     }
 
     const newInput = input;
@@ -268,26 +275,27 @@ const App = props => {
   const handleReciprocalClick = event => {
     setReciprocalClicked(true);
     const newInput = input;
+
+    // remove value from currentValue by itsef from input array
+    // and leave it only inside parentheses of reciprocal operation
+    for (let i = 0; i < currentValue.length; i++) {
+      newInput.pop();
+    }
     newInput.push(`(1/${currentValue})`);
 
-    try {
-      const calculatedValue = math.evaluate(`1/${currentValue}`);
-      setCurrentValue(calculatedValue);
-    } catch (err) {
-      console.log(`Error: ${err}`);
-    }
-
-    setInput(input);
+    setInput(newInput);
     setStoredValue(input.join(""));
   };
 
   const handleDecimalClick = event => {
-    if (!currentValue.includes(event.target.textContent)) {
-      setCurrentValue(currentValue.concat(event.target.textContent));
+    if (currentValue.includes(event.target.textContent)) {
+      return null;
+    } else {
       const newInput = input;
-      if (currentValue === "0.") {
-        newInput.push(currentValue.charAt(0));
+      if (currentValue === "0") {
+        newInput.push(currentValue);
       }
+      setCurrentValue(currentValue.concat(event.target.textContent));
       newInput.push(event.target.textContent);
       setInput(newInput);
       setStoredValue(input.join(""));
