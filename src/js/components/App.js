@@ -179,7 +179,7 @@ const App = props => {
 
     const newInput = input;
     newInput.push(event.target.textContent);
-    setInput(input);
+    setInput(newInput);
     setStoredValue(input.join(""));
   };
 
@@ -202,6 +202,7 @@ const App = props => {
     const math = create(all, config);
 
     const stored = storedValue;
+    console.log(stored);
     try {
       const calculatedValue = math.round(1000000000000 * math.evaluate(stored)) / 1000000000000;
       setCurrentValue(`${calculatedValue}`);
@@ -209,6 +210,7 @@ const App = props => {
       console.log(`Error occurred: ${err}`);
     }
 
+    console.log(input);
     const newInput = input;
     newInput.length = 0;
     setInput(newInput);
