@@ -181,6 +181,7 @@ const App = props => {
     newInput.push(event.target.textContent);
     setInput(newInput);
     setStoredValue(input.join(""));
+    console.log(storedValue);
   };
 
   const handleEqualsClick = event => {
@@ -202,8 +203,9 @@ const App = props => {
     const math = create(all, config);
 
     const stored = storedValue;
-    console.log(stored);
     try {
+      console.log(stored);
+      stored.trim();
       const calculatedValue = math.round(1000000000000 * math.evaluate(stored)) / 1000000000000;
       setCurrentValue(`${calculatedValue}`);
     } catch (err) {
