@@ -205,8 +205,8 @@ const App = props => {
     const stored = storedValue;
     try {
       console.log(stored);
-      stored.trim();
-      const calculatedValue = math.round(1000000000000 * math.evaluate(stored)) / 1000000000000;
+      const trimmed = stored.trim();
+      const calculatedValue = math.round(1000000000000 * math.evaluate(trimmed)) / 1000000000000;
       setCurrentValue(`${calculatedValue}`);
     } catch (err) {
       console.log(`Error occurred: ${err}`);
