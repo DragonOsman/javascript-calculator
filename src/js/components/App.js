@@ -44,17 +44,6 @@ const App = props => {
   };
 
   const handleEqualsClick = event => {
-    if (event.target.name !== "equals" && event.target.textContent !== "=" &&
-    event.target.id !== "equals" && event.target.tagName !== "BUTTON") {
-      return null;
-    }
-
-    if (event.target.id === "fcc_test_suite_wrapper" || event.target.classList.contains("fcc_test_ui") ||
-        event.target.id === "fcc_foldout_toggler" || event.target.id === "hamburger_top" ||
-        event.target.id === "hamburger-middle" || event.target.id === "hamburger-bottom") {
-      return null;
-    }
-
     setEqualsClicked(true);
 
     const config = {
