@@ -185,13 +185,8 @@ const App = props => {
 
     const newInput = input;
     newInput.push(event.target.textContent);
-    // put a space after it in case it's needed
     setInput(newInput);
-    let stringInput = "";
-    for (let i = 0; i < input.length; i++) {
-      stringInput = stringInput.concat(input[i]);
-    }
-    setStoredValue(stringInput);
+    setStoredValue(input.join(""));
   };
 
   const handleEqualsClick = event => {
@@ -218,32 +213,14 @@ const App = props => {
     };
     const math = create(all, config);
 
-    const stored = storedValue;
-
-    let decimalCount = 0;
-    let fixedString = "";
-    for (let i = 0; i < stored.length; i++) {
-      if (i === ".") {
-        decimalCount++;
-      }
+    let stored = storedValue;
+    if (stored.endsWith("+") || stored.endsWith("-") ||
+        stored.endsWith("*") || stored.endsWith("/")) {
+      stored = stored.concat(currentValue);
+      setStoredValue(stored);
     }
-    if (decimalCount > 1) {
-      for (let i = stored.indexOf(".") + 1; i < stored.length; i++) {
-        if (stored.charAt(i).match(/\./) !== null) {
-          fixedString = stored.replace(/\./, "");
-        }
-      }
-    } else if (fixedString.startsWith("0")) {
-      fixedString = fixedString.substring(1);
-    }
-
-    let calculatedValue;
     try {
-      if (fixedString !== "") {
-        calculatedValue = math.round(1000000000000 * math.evaluate(fixedString)) / 1000000000000;
-      } else {
-        calculatedValue = math.round(1000000000000 * math.evaluate(stored)) / 1000000000000;
-      }
+      const calculatedValue = math.round(1000000000000 * math.evaluate(stored)) / 1000000000000;
       setCurrentValue(`${calculatedValue}`);
     } catch (err) {
       console.log(`Error occurred: ${err}`);
@@ -263,10 +240,12 @@ const App = props => {
         const newInput = input;
         newInput.splice(-1, 1);
         setInput(newInput);
+        setStoredValue(input.join(""));
       } else if (input[input.length - 1].endsWith("^2")) {
         const newInput = input;
         newInput.push(event.target.textContent);
         setInput(newInput);
+        setStoredValue(input.join(""));
       }
     }
 
@@ -278,13 +257,14 @@ const App = props => {
       const newInput = input;
       newInput.push(currentValue);
       setInput(newInput);
+      setStoredValue(input.join(""));
 
       // reset to false to make sure other click handlers don't misunderstand
       setEqualsClicked(false);
     } else if (reciprocalClicked || squareRootClicked) {
       const newInput = input;
-      newInput.push(event.target.textContent);
       setInput(newInput);
+      setStoredValue(input.join(""));
 
       // reset to false to make sure other click handlers don't misunderstand
       setReciprocalClicked(false);
@@ -293,14 +273,8 @@ const App = props => {
 
     const newInput = input;
     newInput.push(event.target.textContent);
-    // put a space after it in case it's needed
-    newInput.push(" ");
     setInput(newInput);
-    let stringInput = "";
-    for (const str of input) {
-      stringInput = stringInput.concat(str);
-    }
-    setStoredValue(stringInput);
+    setStoredValue(input.join(""));
   };
 
   const handlePercentageClick = () => {
@@ -315,11 +289,7 @@ const App = props => {
     newInput.push(`(${currentValue}/100)`);
 
     setInput(newInput);
-    let stringInput = "";
-    for (const str of input) {
-      stringInput = stringInput.concat(str);
-    }
-    setStoredValue(stringInput);
+    setStoredValue(input.join(""));
   };
 
   const handleSquareClick = () => {
@@ -332,15 +302,8 @@ const App = props => {
     }
     newInput.push(`(${currentValue})^2`);
 
-    // put a space after it in case it's needed
-    newInput.push(" ");
-
     setInput(newInput);
-    let stringInput = "";
-    for (const str of input) {
-      stringInput = stringInput.concat(str);
-    }
-    setStoredValue(stringInput);
+    setStoredValue(input.join(""));
   };
 
   const handleSquareRootClick = () => {
@@ -354,11 +317,7 @@ const App = props => {
     newInput.push(`sqrt(${currentValue})`);
 
     setInput(newInput);
-    let stringInput = "";
-    for (const str of input) {
-      stringInput = stringInput.concat(str);
-    }
-    setStoredValue(stringInput);
+    setStoredValue(input.join(""));
   };
 
   const handleClearClick = () => {
@@ -393,30 +352,44 @@ const App = props => {
     newInput.push(`(1/${currentValue})`);
 
     setInput(newInput);
-    let stringInput = "";
-    for (const str of input) {
-      stringInput = stringInput.concat(str);
-    }
-    setStoredValue(stringInput);
+    setStoredValue(input.join(""));
   };
 
   const handleDecimalClick = event => {
     if (currentValue.includes(event.target.textContent)) {
       return null;
-    } else {
-      const newInput = input;
-      if (currentValue === "0") {
-        newInput.push(currentValue);
-      }
-      setCurrentValue(currentValue.concat(event.target.textContent));
-      newInput.push(event.target.textContent);
-      setInput(newInput);
-      let stringInput = "";
-      for (const str of input) {
-        stringInput = stringInput.concat(str);
-      }
-      setStoredValue(stringInput);
     }
+
+    setCurrentValue(currentValue.concat(event.target.textContent));
+
+    let decimalCount = 0;
+    for (let i = 0; i < currentValue.length; i++) {
+      if (currentValue.charAt(i) === ".") {
+        decimalCount++;
+      }
+    }
+
+    if (decimalCount > 1) {
+      for (let i = currentValue.indexOf(".") + 1; i < currentValue.length; i++) {
+        if (currentValue.charAt(i) === ".") {
+          currentValue.replace(".", "");
+        }
+      }
+    }
+
+    const newInput = input;
+    if (currentValue === "0" && !input.includes("0")) {
+      newInput.push(currentValue);
+    }
+
+    let fixedString = "";
+    if (currentValue.startsWith("0")) {
+      fixedString = currentValue.substring(1);
+      setCurrentValue(fixedString);
+    }
+    newInput.push(event.target.textContent);
+    setInput(newInput);
+    setStoredValue(input.join(""));
   };
 
   const clickHandler = event => {
