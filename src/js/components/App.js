@@ -175,7 +175,6 @@ const App = props => {
     const newInput = input;
     newInput.length = 0;
     setInput(newInput);
-    console.log(input);
   };
 
   const handleClearEntryClick = () => {
