@@ -213,12 +213,7 @@ const App = props => {
     };
     const math = create(all, config);
 
-    let stored = storedValue;
-    if (stored.endsWith("+") || stored.endsWith("-") ||
-        stored.endsWith("*") || stored.endsWith("/")) {
-      stored = stored.concat(currentValue);
-      setStoredValue(stored);
-    }
+    const stored = storedValue;
     try {
       const calculatedValue = math.round(1000000000000 * math.evaluate(stored)) / 1000000000000;
       setCurrentValue(`${calculatedValue}`);
