@@ -19,6 +19,10 @@ const App = props => {
     } else if ((currentValue === "0" && event.target.textContent !== "0") ||
     equalsClicked || reciprocalClicked || percentageClicked || squareRootClicked) {
       setCurrentValue(event.target.textContent);
+      const newInput = [...input];
+      newInput.push(event.target.textContent);
+      setInput(newInput);
+      setStoredValue(input.join(""));
 
       // reset it to make sure other click handlers don't misunderstand
       setReciprocalClicked(false);
@@ -30,14 +34,26 @@ const App = props => {
     if (input.length > 0) {
       if (operators.includes(input[input.length - 1])) {
         setCurrentValue(event.target.textContent);
+        const newInput = [...input];
+        newInput.push(event.target.textContent);
+        setInput(newInput);
+        setStoredValue(input.join(""));
       } else if (!isNaN(input[input.length - 1]) || input[input.length - 1] === ".") {
         setCurrentValue(`${currentValue}${event.target.textContent}`);
+        const newInput = [...input];
+        newInput.push(event.target.textContent);
+        setInput(newInput);
+        setStoredValue(input.join(""));
       } else if (input[input.length - 1].endsWith("^2")) {
         setCurrentValue(event.target.textContent);
+        const newInput = [...input];
+        newInput.push(event.target.textContent);
+        setInput(newInput);
+        setStoredValue(input.join(""));
       }
     }
 
-    const newInput = input;
+    const newInput = [...input];
     newInput.push(event.target.textContent);
     setInput(newInput);
     setStoredValue(input.join(""));
@@ -56,7 +72,12 @@ const App = props => {
     };
     const math = create(all, config);
 
-    const stored = storedValue;
+    const newInput = [...input];
+    newInput.push(currentValue);
+    setInput(newInput);
+    setStoredValue(input.join(""));
+
+    const stored = storedValue.concat(currentValue);
     try {
       const calculatedValue = math.round(1000000000000 * math.evaluate(stored)) / 1000000000000;
       setCurrentValue(`${calculatedValue}`);
@@ -64,7 +85,6 @@ const App = props => {
       console.log(`Error occurred: ${err}`);
     }
 
-    const newInput = input;
     newInput.length = 0;
     setInput(newInput);
     setStoredValue(`${stored}${event.target.textContent}`);
@@ -73,14 +93,18 @@ const App = props => {
   const handleOperatorClick = event => {
     if (input.length > 0) {
       // handle 2 or more operators clicked in a row
+      const newInput = [...input];
       if (operators.includes(input[input.length - 1]) && event.target.textContent !== "-") {
-        // take the previously clicked operator out of the input array
-        const newInput = input;
-        newInput.splice(-1, 1);
+        // take the previously clicked operator(s) out of the input array
+        for (let i = 0; i < input.length; i++) {
+          if (input[i].match(/[\\+\\-\\*\\/]+/) !== null) {
+            newInput.splice(-1, 1);
+          }
+        }
         setInput(newInput);
         setStoredValue(input.join(""));
       } else if (input[input.length - 1].endsWith("^2")) {
-        const newInput = input;
+        const newInput = [...input];
         newInput.push(event.target.textContent);
         setInput(newInput);
         setStoredValue(input.join(""));
@@ -92,7 +116,7 @@ const App = props => {
       // This means equals button was clicked (can be like this in other cases too but still)
       // set input array and storedValue to equal the result from the
       // previous calculation
-      const newInput = input;
+      const newInput = [...input];
       newInput.push(currentValue);
       setInput(newInput);
       setStoredValue(input.join(""));
@@ -100,7 +124,7 @@ const App = props => {
       // reset to false to make sure other click handlers don't misunderstand
       setEqualsClicked(false);
     } else if (reciprocalClicked || squareRootClicked) {
-      const newInput = input;
+      const newInput = [...input];
       setInput(newInput);
       setStoredValue(input.join(""));
 
@@ -109,7 +133,7 @@ const App = props => {
       setSquareRootClicked(false);
     }
 
-    const newInput = input;
+    const newInput = [...input];
     newInput.push(event.target.textContent);
     setInput(newInput);
     setStoredValue(input.join(""));
@@ -117,7 +141,7 @@ const App = props => {
 
   const handlePercentageClick = () => {
     setPercentageClicked(true);
-    const newInput = input;
+    const newInput = [...input];
 
     // remove value from currentValue by itsef from input array
     // and leave it only inside parentheses of percentage operation
@@ -131,7 +155,7 @@ const App = props => {
   };
 
   const handleSquareClick = () => {
-    const newInput = input;
+    const newInput = [...input];
 
     // remove value from currentValue by itsef from input array
     // and leave it only inside parentheses of square operation
@@ -145,7 +169,7 @@ const App = props => {
   };
 
   const handleSquareRootClick = () => {
-    const newInput = input;
+    const newInput = [...input];
 
     // remove value from currentValue by itsef from input array
     // and leave it only inside parentheses of square root operation
@@ -182,7 +206,7 @@ const App = props => {
 
   const handleReciprocalClick = () => {
     setReciprocalClicked(true);
-    const newInput = input;
+    const newInput = [...input];
 
     // remove value from currentValue by itsef from input array
     // and leave it only inside parentheses of reciprocal operation
@@ -217,7 +241,7 @@ const App = props => {
       }
     }
 
-    const newInput = input;
+    const newInput = [...input];
     if (currentValue === "0" && !input.includes("0")) {
       newInput.push(currentValue);
     }
@@ -235,14 +259,14 @@ const App = props => {
   const handleSignSwitchClick = () => {
     if (Math.sign(Number(currentValue)) === 1) {
       setCurrentValue(`-${currentValue}`);
-      const newInput = input;
+      const newInput = [...input];
       newInput[newInput.length - 1] = `-${newInput[newInput.length - 1]}`;
       setInput(newInput);
       setStoredValue(input.join(""));
     } else if (Math.sign(Number(currentValue)) === -1) {
       const positiveNum = Math.abs(Number(currentValue));
       setCurrentValue(positiveNum.toString());
-      const newInput = input;
+      const newInput = [...input];
       newInput[newInput.length - 1] = `${Math.abs(Number(newInput[newInput.length - 1]))}`;
       setInput(newInput);
       setStoredValue(input.join(""));
