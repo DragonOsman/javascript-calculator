@@ -248,7 +248,6 @@ const App = props => {
     if (Math.sign(Number(currentValue)) === 1) {
       setCurrentValue(`-${currentValue}`);
       const newInput = input;
-
       newInput[newInput.length - 1] = `-${newInput[newInput.length - 1]}`;
       setInput(newInput);
       setStoredValue(input.join(""));
@@ -256,7 +255,6 @@ const App = props => {
       const positiveNum = Math.abs(Number(currentValue));
       setCurrentValue(positiveNum.toString());
       const newInput = input;
-
       newInput[newInput.length - 1] = `${Math.abs(Number(newInput[newInput.length - 1]))}`;
       setInput(newInput);
       setStoredValue(input.join(""));
