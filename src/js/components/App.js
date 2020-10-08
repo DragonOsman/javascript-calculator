@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Keypad from "./Keypad";
 import Display from "./Display";
-import { create, all } from "mathjs";
+import { create, all, isNumeric } from "mathjs";
 
 const App = props => {
   const [currentValue, setCurrentValue] = useState("0");
@@ -73,11 +73,23 @@ const App = props => {
     const math = create(all, config);
 
     const newInput = [...input];
-    newInput.push(currentValue);
-    setInput(newInput);
+    if (!input[input.length - 1].endsWith(")") || !isNumeric(input[input.length - 1])) {
+      newInput.push(currentValue);
+      setInput(newInput);
+    }
+
     setStoredValue(input.join(""));
 
-    const stored = storedValue.concat(currentValue);
+    let stored = "";
+    if (input !== storedValue.split("")) {
+      for (let i = 0; i < input.length; i++) {
+        stored = `${stored}${input[i]}`;
+        if (input === storedValue.split("")) {
+          break;
+        }
+      }
+    }
+    setStoredValue(stored);
     try {
       const calculatedValue = math.round(1000000000000 * math.evaluate(stored)) / 1000000000000;
       setCurrentValue(`${calculatedValue}`);
@@ -96,18 +108,38 @@ const App = props => {
       const newInput = [...input];
       if (operators.includes(input[input.length - 1]) && event.target.textContent !== "-") {
         // take the previously clicked operator(s) out of the input array
-        for (let i = 0; i < input.length; i++) {
-          if (input[i].match(/[\\+\\-\\*\\/]+/) !== null) {
-            newInput.splice(-1, 1);
+        while (operators.includes(newInput[newInput.length - 1])) {
+          newInput.pop();
+        }
+        newInput.push(event.target.textContent);
+        setInput(newInput);
+        console.log(input);
+        setStoredValue(input.join(""));
+        let stored = "";
+        if (input !== storedValue.split("")) {
+          for (let i = 0; i < input.length; i++) {
+            stored = `${stored}${input[i]}`;
+            if (input === storedValue.split("")) {
+              break;
+            }
           }
         }
-        setInput(newInput);
-        setStoredValue(input.join(""));
+        setStoredValue(stored);
       } else if (input[input.length - 1].endsWith("^2")) {
         const newInput = [...input];
         newInput.push(event.target.textContent);
         setInput(newInput);
         setStoredValue(input.join(""));
+        let stored = "";
+        if (input !== storedValue.split("")) {
+          for (let i = 0; i < input.length; i++) {
+            stored = `${stored}${input[i]}`;
+            if (input === storedValue.split("")) {
+              break;
+            }
+          }
+        }
+        setStoredValue(stored);
       }
     }
 
@@ -118,8 +150,20 @@ const App = props => {
       // previous calculation
       const newInput = [...input];
       newInput.push(currentValue);
+      newInput.push(event.target.textContent);
       setInput(newInput);
+      console.log(input);
       setStoredValue(input.join(""));
+      let stored = "";
+      if (input !== storedValue.split("")) {
+        for (let i = 0; i < input.length; i++) {
+          stored = `${stored}${input[i]}`;
+          if (input === storedValue.split("")) {
+            break;
+          }
+        }
+      }
+      setStoredValue(stored);
 
       // reset to false to make sure other click handlers don't misunderstand
       setEqualsClicked(false);
@@ -127,6 +171,17 @@ const App = props => {
       const newInput = [...input];
       setInput(newInput);
       setStoredValue(input.join(""));
+
+      let stored = "";
+      if (input !== storedValue.split("")) {
+        for (let i = 0; i < input.length; i++) {
+          stored = `${stored}${input[i]}`;
+          if (input === storedValue.split("")) {
+            break;
+          }
+        }
+      }
+      setStoredValue(stored);
 
       // reset to false to make sure other click handlers don't misunderstand
       setReciprocalClicked(false);
@@ -137,6 +192,17 @@ const App = props => {
     newInput.push(event.target.textContent);
     setInput(newInput);
     setStoredValue(input.join(""));
+
+    let stored = "";
+    if (input !== storedValue.split("")) {
+      for (let i = 0; i < input.length; i++) {
+        stored = `${stored}${input[i]}`;
+        if (input === storedValue.split("")) {
+          break;
+        }
+      }
+    }
+    setStoredValue(stored);
   };
 
   const handlePercentageClick = () => {
