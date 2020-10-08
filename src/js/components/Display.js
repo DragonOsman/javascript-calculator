@@ -5,10 +5,10 @@ const Display = props => {
   return (
     <div id="screen">
       <div id="formula">
-        <p className="value">{props.storedValue}</p>
+        <p className="stored-value">{props.storedValue}</p>
       </div>
       <div id="display">
-        <p className="value">{props.currentValue}</p>
+        <p className="current-value">{props.currentValue}</p>
       </div>
     </div>
   );
