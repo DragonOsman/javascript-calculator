@@ -39,7 +39,7 @@ main {
         color: #000;
         text-align: right;
         background-color: #a9a9a9;
-        height: 20px;
+        height: $formula-height;
       }
   
       & #display {
@@ -48,7 +48,7 @@ main {
         color: #000;
         text-align: right;
         background-color: #a9a9a9;
-        height: 30px;
+        height:  $display-height;
         text-align: right;
       }
     }
