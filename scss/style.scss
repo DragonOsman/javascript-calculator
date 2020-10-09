@@ -1,3 +1,7 @@
+$display-height: 30px;
+$formula-height: 20px;
+$screen-height: calc($display-height + $formula-height);
+
 *,
 *::after,
 *::before {
@@ -27,7 +31,7 @@ main {
     & #screen {
       background-color: #a9a9a9;
       width: 100%;
-      height: calc(20px + 30px);
+      height: $screen-height;
 
       & #formula {
         width: 100%;

@@ -27,7 +27,7 @@ main #root {
 main #root #screen {
   background-color: #a9a9a9;
   width: 100%;
-  height: calc(20px + 30px);
+  height: calc($display-height + $formula-height);
 }
 main #root #screen #formula {
   width: 100%;
