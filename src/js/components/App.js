@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Keypad from "./Keypad";
 import Display from "./Display";
 import { create, all } from "mathjs";
@@ -418,10 +418,6 @@ const App = props => {
     className: "calculation-submit keypad-button",
     clickHandler: handleEqualsClick
   }];
-
-  useEffect(() => {
-    setStoredValue(input.join(""));
-  }, [input, storedValue]);
 
   return (
     <React.Fragment>
