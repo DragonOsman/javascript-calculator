@@ -9,7 +9,6 @@ const Keypad = props => {
       id={props.id}
       name={props.name}
       value={props.value}
-      clickHandler={props.clickHandler}
     />
   );
 };
@@ -17,8 +16,7 @@ Keypad.propTypes = {
   className: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  clickHandler: PropTypes.func.isRequired
+  value: PropTypes.string.isRequired
 };
 
 export default Keypad;

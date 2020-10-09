@@ -8,7 +8,6 @@ const Button = props => {
         className={props.className}
         id={props.id}
         name={props.name}
-        onClick={props.clickHandler}
       >
         { props.value }
       </button>
@@ -19,8 +18,7 @@ Button.propTypes = {
   className: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  clickHandler: PropTypes.func.isRequired
+  name: PropTypes.string.isRequired
 };
 
 export default Button;
