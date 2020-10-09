@@ -10,6 +10,7 @@ const App = props => {
   const [percentageClicked, setPercentageClicked] = useState(false);
   const [squareRootClicked, setSquareRootClicked] = useState(false);
   const [equalsClicked, setEqualsClicked] = useState(false);
+  const [backSpaceClicked, setBackSpaceClicked] = useState(false);
   const [input, setInput] = useState([]);
   const operators = ["+", "-", "*", "/"];
 
@@ -30,6 +31,12 @@ const App = props => {
       setEqualsClicked(false);
       setPercentageClicked(false);
       setSquareRootClicked(false);
+    } else if (backSpaceClicked) {
+      if (currentValue === "0") {
+        setCurrentValue(button.textContent);
+      } else if (currentValue !== "0") {
+        setCurrentValue(button.textContent);
+      }
     }
 
     if (newInput.length > 0) {
@@ -45,6 +52,11 @@ const App = props => {
       }
     }
 
+    if (newInput.length > 0 && !isNaN(newInput[newInput.length - 1])) {
+      if (backSpaceClicked) {
+        newInput[newInput.length - 1] = button.textContent;
+      }
+    }
     newInput = [...newInput, button.textContent];
     setInput(newInput);
     setStoredValue(newInput.join(""));
@@ -174,6 +186,7 @@ const App = props => {
   };
 
   const handleBackSpaceClick = () => {
+    setBackSpaceClicked(true);
     if (currentValue.length === 1) {
       setCurrentValue("0");
     } else if (currentValue.length > 1) {
