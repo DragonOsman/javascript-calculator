@@ -35,8 +35,11 @@ const App = props => {
       if (currentValue === "0") {
         setCurrentValue(button.textContent);
       } else if (currentValue !== "0") {
-        setCurrentValue(button.textContent);
+        setCurrentValue(`${currentValue}${button.textContent}`);
       }
+
+      newInput[newInput.length - 1] = "";
+      setBackSpaceClicked(false);
     }
 
     if (newInput.length > 0) {
@@ -52,11 +55,6 @@ const App = props => {
       }
     }
 
-    if (newInput.length > 0 && !isNaN(newInput[newInput.length - 1])) {
-      if (backSpaceClicked) {
-        newInput[newInput.length - 1] = button.textContent;
-      }
-    }
     newInput = [...newInput, button.textContent];
     setInput(newInput);
     setStoredValue(newInput.join(""));
