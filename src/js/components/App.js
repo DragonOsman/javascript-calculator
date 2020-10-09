@@ -67,7 +67,6 @@ const App = props => {
     setStoredValue(newInput.join(""));
 
     const stored = storedValue;
-    setStoredValue(`${stored}${event.target.textContent}`);
     try {
       const calculatedValue = math.round(1000000000000 * math.evaluate(stored)) / 1000000000000;
       setCurrentValue(`${calculatedValue}`);
@@ -75,8 +74,8 @@ const App = props => {
       console.log(`Error occurred: ${err}`);
     }
 
-    newInput.length = 0;
-    setInput(newInput);
+    setInput([]);
+    setStoredValue(`${stored}${event.target.textContent}`);
   };
 
   const handleOperatorClick = event => {
@@ -124,7 +123,8 @@ const App = props => {
     // remove value from currentValue by itsef from input array
     // and leave it only inside parentheses of percentage operation
     for (let i = 0; i < currentValue.length; i++) {
-      setInput(newInput.pop());
+      newInput.pop();
+      setInput(newInput);
     }
 
     newInput = [...newInput, `(${currentValue}/100)`];
@@ -137,7 +137,8 @@ const App = props => {
     // and leave it only inside parentheses of square operation
     let newInput = [...input];
     for (let i = 0; i < currentValue.length; i++) {
-      setInput(newInput.splice(i, i));
+      newInput.pop();
+      setInput(newInput);
     }
 
     newInput = [...newInput, `((${currentValue})^2)`];
@@ -151,7 +152,8 @@ const App = props => {
     // remove value from currentValue by itsef from input array
     // and leave it only inside parentheses of square root operation
     for (let i = 0; i < currentValue.length; i++) {
-      setInput(newInput.splice(i, i));
+      newInput.pop();
+      setInput(newInput);
     }
 
     newInput = [...newInput, `sqrt(${currentValue})`];
@@ -188,7 +190,8 @@ const App = props => {
     // remove value from currentValue by itsef from input array
     // and leave it only inside parentheses of reciprocal operation
     for (let i = 0; i < currentValue.length; i++) {
-      setInput(newInput.splice(i, i));
+      newInput.pop();
+      setInput(newInput);
     }
 
     newInput = [...newInput, `(1/${currentValue})`];
