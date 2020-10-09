@@ -27,7 +27,7 @@ main {
     & #screen {
       background-color: #a9a9a9;
       width: 100%;
-      height: 100px;
+      height: calc(20px + 30px);
 
       & #formula {
         width: 100%;
