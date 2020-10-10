@@ -7,7 +7,8 @@
 }
 
 html {
-  font-family: "Open Sans", sans-serif;
+  font-family: "Digital-7", "Open Sans", sans-serif;
+  src: url("digital-7.ttf") format("truetype"), url("digital-7_1.woff") format("woff");
 }
 
 body {
@@ -31,14 +32,14 @@ main #root #screen {
 }
 main #root #screen #formula {
   width: 100%;
-  font-size: 12px;
+  font-size: 14px;
   color: #000;
   text-align: right;
   background-color: #a9a9a9;
   height: 20px;
 }
 main #root #screen #display {
-  font-size: 15px;
+  font-size: 20px;
   width: 100%;
   color: #000;
   text-align: right;
