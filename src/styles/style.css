@@ -43,8 +43,9 @@ main #root #screen #display {
   color: #000;
   text-align: right;
   background-color: #a9a9a9;
-  height: 30px;
+  height: 28px;
   text-align: right;
+  bottom: 0;
 }
 main #root #keypad {
   width: 100%;

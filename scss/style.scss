@@ -1,4 +1,4 @@
-$display-height: 30px;
+$display-height: 28px;
 $formula-height: 20px;
 $screen-height: calc($display-height + $formula-height);
 
@@ -50,6 +50,7 @@ main {
         background-color: #a9a9a9;
         height:  $display-height;
         text-align: right;
+        bottom: 0;
       }
     }
 
