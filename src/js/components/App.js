@@ -10,7 +10,6 @@ const App = props => {
   const [percentageClicked, setPercentageClicked] = useState(false);
   const [squareRootClicked, setSquareRootClicked] = useState(false);
   const [equalsClicked, setEqualsClicked] = useState(false);
-  const [backSpaceClicked, setBackSpaceClicked] = useState(false);
   const [input, setInput] = useState([]);
   const operators = ["+", "-", "*", "/"];
 
@@ -31,15 +30,6 @@ const App = props => {
       setEqualsClicked(false);
       setPercentageClicked(false);
       setSquareRootClicked(false);
-    } else if (backSpaceClicked) {
-      if (currentValue === "0") {
-        setCurrentValue(button.textContent);
-      } else if (currentValue !== "0") {
-        setCurrentValue(`${currentValue}${button.textContent}`);
-      }
-
-      newInput[newInput.length - 1] = "";
-      setBackSpaceClicked(false);
     }
 
     if (newInput.length > 0) {
@@ -184,13 +174,20 @@ const App = props => {
   };
 
   const handleBackSpaceClick = () => {
-    setBackSpaceClicked(true);
     if (currentValue.length === 1) {
       setCurrentValue("0");
     } else if (currentValue.length > 1) {
       // set currentValue to a string with the last element cut off
       const newValue = currentValue.slice(0, currentValue.length - 1);
       setCurrentValue(newValue);
+    }
+
+    let newInput = [...input];
+    if (!isNaN(storedValue.charAt(storedValue.length - 1)) && !isNaN(newInput[newInput.length - 1])) {
+      newInput = newInput.slice(0, newInput.length - 1);
+      setInput(newInput);
+      const stored = storedValue.slice(0, storedValue.length - 1);
+      setStoredValue(stored);
     }
   };
 
@@ -260,175 +257,61 @@ const App = props => {
     }
   };
 
-  const buttons = [{
-    name: "percentage",
-    value: "%",
-    type: "function",
-    id: "percentage",
-    className: "function keypad-button",
-    clickHandler: handlePercentageClick
-  }, {
-    name: "clear-entry",
-    value: "CE",
-    type: "effect",
-    id: "clear-entry",
-    className: "effect keypad-button",
-    clickHandler: handleClearEntryClick
-  }, {
-    name: "clear",
-    value: "C",
-    type: "effect",
-    id: "clear",
-    className: "effect keypad-button",
-    clickHandler: handleClearClick
-  }, {
-    name: "backspace",
-    value: "\u232b",
-    type: "effect",
-    id: "backspace",
-    className: "effect keypad-button",
-    clickHandler: handleBackSpaceClick
-  }, {
-    name: "reciprocal-function",
-    value: "1/𝑥",
-    type: "function",
-    id: "reciprocal",
-    className: "function keypad-button",
-    clickHandler: handleReciprocalClick
-  }, {
-    name: "square-function",
-    value: "𝑥²",
-    type: "function",
-    id: "square",
-    className: "function keypad-button",
-    clickHandler: handleSquareClick
-  }, {
-    name: "square-root-function",
-    value: "²√𝑥",
-    type: "function",
-    id: "square-root",
-    className: "function keypad-button",
-    clickHandler: handleSquareRootClick
-  }, {
-    name: "divide",
-    value: "/",
-    type: "operator",
-    id: "divide",
-    className: "operator keypad-button",
-    clickHandler: handleOperatorClick
-  }, {
-    name: "number-button",
-    value: "7",
-    type: "number",
-    id: "seven",
-    className: "number keypad-button",
-    clickHandler: handleNumberClick
-  }, {
-    name: "number-button",
-    value: "8",
-    type: "number",
-    id: "eight",
-    className: "number keypad-button",
-    clickHandler: handleNumberClick
-  }, {
-    name: "number-button",
-    value: "9",
-    type: "number",
-    id: "nine",
-    className: "number keypad-button",
-    clickHandler: handleNumberClick
-  }, {
-    name: "multiply",
-    value: "*",
-    type: "operator",
-    id: "multiply",
-    className: "operator keypad-button",
-    clickHandler: handleOperatorClick
-  }, {
-    name: "number-button",
-    value: "4",
-    type: "number",
-    id: "four",
-    className: "number keypad-button",
-    clickHandler: handleNumberClick
-  }, {
-    name: "number-button",
-    value: "5",
-    type: "number",
-    id: "five",
-    className: "number keypad-button",
-    clickHandler: handleNumberClick
-  }, {
-    name: "number-button",
-    value: "6",
-    type: "number",
-    id: "six",
-    className: "number keypad-button",
-    clickHandler: handleNumberClick
-  }, {
-    name: "minus",
-    value: "-",
-    type: "operator",
-    id: "subtract",
-    className: "operator keypad-button",
-    clickHandler: handleOperatorClick
-  }, {
-    name: "number-button",
-    value: "1",
-    type: "number",
-    id: "one",
-    className: "number keypad-button",
-    clickHandler: handleNumberClick
-  }, {
-    name: "number-button",
-    value: "2",
-    type: "number",
-    id: "two",
-    className: "number keypad-button",
-    clickHandler: handleNumberClick
-  }, {
-    name: "number-button",
-    value: "3",
-    type: "number",
-    id: "three",
-    className: "number keypad-button",
-    clickHandler: handleNumberClick
-  }, {
-    name: "add",
-    value: "+",
-    type: "operator",
-    id: "add",
-    className: "operator keypad-button",
-    clickHandler: handleOperatorClick
-  }, {
-    name: "sign-switch",
-    value: "±",
-    type: "effect",
-    id: "sign-switch",
-    className: "number-helper keypad-button",
-    clickHandler: handleSignSwitchClick
-  }, {
-    name: "number-button",
-    value: "0",
-    type: "number",
-    id: "zero",
-    className: "number keypad-button",
-    clickHandler: handleNumberClick
-  }, {
-    name: "decimal",
-    value: ".",
-    type: "effect",
-    id: "decimal",
-    className: "number-helper keypad-button",
-    clickHandler: handleDecimalClick
-  }, {
-    name: "equals",
-    value: "=",
-    type: "calculation-submit",
-    id: "equals",
-    className: "calculation-submit keypad-button",
-    clickHandler: handleEqualsClick
-  }];
+  const clickHandler = (event) => {
+    const button = event.target;
+    switch (button.id) {
+      case "zero":
+      case "one":
+      case "two":
+      case "three":
+      case "four":
+      case "five":
+      case "six":
+      case "seven":
+      case "eight":
+      case "nine":
+        handleNumberClick(event);
+        break;
+      case "add":
+      case "subtract":
+      case "multiply":
+      case "divide":
+        handleOperatorClick(event);
+        break;
+      case "equals":
+        handleEqualsClick(event);
+        break;
+      case "decimal":
+        handleDecimalClick(event);
+        break;
+      case "clear":
+        handleClearClick();
+        break;
+      case "clear-entry":
+        handleClearEntryClick();
+        break;
+      case "percentage":
+        handlePercentageClick();
+        break;
+      case "backspace":
+        handleBackSpaceClick();
+        break;
+      case "reciprocal":
+        handleReciprocalClick();
+        break;
+      case "square":
+        handleSquareClick();
+        break;
+      case "square-root":
+        handleSquareRootClick();
+        break;
+      case "sign-switch":
+        handleSignSwitchClick();
+        break;
+      default:
+        return null;
+    }
+  };
 
   return (
     <React.Fragment>
@@ -436,18 +319,9 @@ const App = props => {
         storedValue={storedValue}
         currentValue={currentValue}
       />
-      <div id="keypad">
-        {buttons.map((object, index) =>
-          <Keypad
-            key={index}
-            className={object.className}
-            id={object.id}
-            name={object.name}
-            value={object.value}
-            clickHandler={object.clickHandler}
-          />
-        )}
-      </div>
+      <Keypad
+        clickHandler={clickHandler}
+      />
     </React.Fragment>
   );
 };
