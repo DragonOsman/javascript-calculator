@@ -15,15 +15,12 @@ const App = props => {
 
   const handleNumberClick = event => {
     const button = event.target;
-    let newInput = [...input];
+    const newInput = [...input];
     if (currentValue === "0" && button.textContent === "0") {
       return null;
     } else if ((currentValue === "0" && button.textContent !== "0") ||
     equalsClicked || reciprocalClicked || percentageClicked || squareRootClicked) {
       setCurrentValue(button.textContent);
-      newInput.length = 0;
-      setInput(newInput);
-      setStoredValue(newInput.join(""));
 
       // reset it to make sure other click handlers don't misunderstand
       setReciprocalClicked(false);
@@ -33,19 +30,15 @@ const App = props => {
     }
 
     if (newInput.length > 0) {
-      if (operators.includes(newInput[newInput.length - 1])) {
+      if (operators.includes(newInput[newInput.length - 1]) ||
+      newInput[newInput.length - 1].endsWith("^2)")) {
         setCurrentValue(button.textContent);
       } else if (!isNaN(newInput[newInput.length - 1]) || newInput[newInput.length - 1] === ".") {
         setCurrentValue(`${currentValue}${button.textContent}`);
-      } else if (newInput[newInput.length - 1].endsWith("^2)")) {
-        setCurrentValue(button.textContent);
-        newInput.length = 0;
-        setInput(newInput);
-        setStoredValue(newInput.join(""));
       }
     }
 
-    newInput = [...newInput, button.textContent];
+    newInput.push(button.textContent);
     setInput(newInput);
     setStoredValue(newInput.join(""));
   };
@@ -118,7 +111,7 @@ const App = props => {
 
   const handlePercentageClick = () => {
     setPercentageClicked(true);
-    let newInput = [...input];
+    const newInput = [...input];
 
     // remove value from currentValue by itsef from input array
     // and leave it only inside parentheses of percentage operation
@@ -127,7 +120,7 @@ const App = props => {
       setInput(newInput);
     }
 
-    newInput = [...newInput, `(${currentValue}/100)`];
+    newInput.push(`(${currentValue}/100)`);
     setInput(newInput);
     setStoredValue(newInput.join(""));
   };
@@ -135,19 +128,19 @@ const App = props => {
   const handleSquareClick = () => {
     // remove value from currentValue by itsef from input array
     // and leave it only inside parentheses of square operation
-    let newInput = [...input];
+    const newInput = [...input];
     for (let i = 0; i < currentValue.length; i++) {
       newInput.pop();
       setInput(newInput);
     }
 
-    newInput = [...newInput, `((${currentValue})^2)`];
+    newInput.push(`((${currentValue})^2)`);
     setInput(newInput);
     setStoredValue(newInput.join(""));
   };
 
   const handleSquareRootClick = () => {
-    let newInput = [...input];
+    const newInput = [...input];
     setSquareRootClicked(true);
     // remove value from currentValue by itsef from input array
     // and leave it only inside parentheses of square root operation
@@ -156,7 +149,7 @@ const App = props => {
       setInput(newInput);
     }
 
-    newInput = [...newInput, `sqrt(${currentValue})`];
+    newInput.push(`sqrt(${currentValue})`);
     setInput(newInput);
     setStoredValue(newInput.join(""));
   };
@@ -194,7 +187,7 @@ const App = props => {
   const handleReciprocalClick = () => {
     setReciprocalClicked(true);
 
-    let newInput = [...input];
+    const newInput = [...input];
     // remove value from currentValue by itsef from input array
     // and leave it only inside parentheses of reciprocal operation
     for (let i = 0; i < currentValue.length; i++) {
@@ -202,14 +195,14 @@ const App = props => {
       setInput(newInput);
     }
 
-    newInput = [...newInput, `(1/${currentValue})`];
+    newInput.push(`(1/${currentValue})`);
     setInput(newInput);
     setStoredValue(newInput.join(""));
   };
 
   const handleDecimalClick = event => {
     const button = event.target;
-    let newInput = [...input];
+    const newInput = [...input];
     if (currentValue.includes(button.textContent)) {
       return null;
     }
@@ -232,11 +225,11 @@ const App = props => {
     }
 
     if (currentValue === "0" && !newInput.includes("0")) {
-      newInput = [...newInput, currentValue];
+      newInput.push(currentValue);
       setInput(newInput);
     }
 
-    newInput = [...newInput, button.textContent];
+    newInput.push(button.textContent);
     setInput(newInput);
   };
 

@@ -1,6 +1,6 @@
 $display-height: 28px;
 $formula-height: 20px;
-$screen-height: calc($display-height + $formula-height);
+$screen-height: calc(#{$display-height} + #{$formula-height});
 
 *,
 *::after,
