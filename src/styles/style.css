@@ -7,8 +7,7 @@
 }
 
 html {
-  font-family: "Digital-7", "Open Sans", sans-serif;
-  src: url("digital-7.ttf") format("truetype"), url("digital-7_1.woff") format("woff");
+  font-family: "Orbitron", sans-serif;
 }
 
 body {
