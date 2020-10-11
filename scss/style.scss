@@ -28,7 +28,6 @@ main {
     width: 50%;
     background-color: #800000;
     border: 3px solid #800000;
-    height: 100vh;
 
     & #screen {
       background-color: #a9a9a9;
@@ -37,7 +36,7 @@ main {
 
       & #formula {
         width: 100%;
-        font-size: 13px;
+        font-size: 14px;
         color: #000;
         text-align: right;
         background-color: #a9a9a9;
@@ -45,7 +44,7 @@ main {
       }
   
       & #display {
-        font-size: 20px;
+        font-size: 18px;
         width: 100%;
         color: #000;
         text-align: right;
@@ -58,9 +57,12 @@ main {
 
     & #keypad {
       width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-template-rows:  1fr 1fr 1fr 1fr 1fr;
 
       button {
-        width: 25%;
+        width: 100%;
         height: 100px;
         background-color: #808080;
         font-weight: bold;
@@ -81,11 +83,27 @@ main {
   }
 }
 
-@media screen and (min-width: 150px) and (max-width: 500px) {
+@media screen and (min-width: 200px) and (max-width: 500px) {
   main {
-    & #keypad {
-      & button {
-        height: 38px;
+    & #root {
+      & #screen {
+        height: calc(15px + 5px);
+
+        & #formula {
+          height: 5px;
+          font-size: 4px;
+        }
+
+        & #display {
+          height: 15px;
+          font-size: 14px;
+        }
+      }
+
+      & #keypad {
+        & button {
+          height: 30px;
+        }
       }
     }
   }
@@ -95,18 +113,22 @@ main {
   main {
     & #root {
       & #screen {
+        height: calc(20px + 15px);
+
         & #formula {
-          height: 12px;
+          height: 15px;
+          font-size: 12px;
         }
 
         & #display {
           height: 20px;
+          font-size: 15px;
         }
       }
 
       & #keypad {
         & button {
-          height: 48px;
+          height: 45px;
         }
       }
     }
@@ -116,8 +138,21 @@ main {
 @media screen and (min-width: 768px) and (max-width: 1024px) {
   main {
     & #keypad {
+      & #screen {
+        height: calc(30px + 10px);
+
+        & #formula {
+          height: 30px;
+          font-size: 14px;
+        }
+
+        & #display {
+          height: 17px;
+        }
+      }
+
       & button {
-        height: 58px;
+        height: 50px;
       }
     }
   }

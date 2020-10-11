@@ -70,6 +70,8 @@ const App = props => {
     setInput([]);
     if (!storedValue.endsWith("=")) {
       setStoredValue(`${stored}${event.target.textContent}`);
+    } else {
+      setStoredValue(storedValue);
     }
   };
 
@@ -88,7 +90,7 @@ const App = props => {
     }
 
     // take the result of the previous evaluation for a new calculation
-    if (equalsClicked) {
+    if (equalsClicked || currentValue === "0") {
       // This means equals button was clicked (can be like this in other cases too but still)
       // set input array and storedValue to equal the result from the
       // previous calculation
