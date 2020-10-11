@@ -68,7 +68,9 @@ const App = props => {
     }
 
     setInput([]);
-    setStoredValue(`${stored}${event.target.textContent}`);
+    if (!storedValue.endsWith("=")) {
+      setStoredValue(`${stored}${event.target.textContent}`);
+    }
   };
 
   const handleOperatorClick = event => {
@@ -167,21 +169,21 @@ const App = props => {
   };
 
   const handleBackSpaceClick = () => {
-    if (currentValue.length === 1) {
-      setCurrentValue("0");
-    } else if (currentValue.length > 1) {
-      // set currentValue to a string with the last element cut off
-      const newValue = currentValue.slice(0, currentValue.length - 1);
-      setCurrentValue(newValue);
+    if (!equalsClicked) {
+      if (currentValue.length === 1) {
+        setCurrentValue("0");
+      } else if (currentValue.length > 1) {
+        // set currentValue to a string with the last element cut off
+        const newValue = currentValue.slice(0, currentValue.length - 1);
+        setCurrentValue(newValue);
+      }
     }
 
     let newInput = [...input];
-    if (!isNaN(storedValue.charAt(storedValue.length - 1)) && !isNaN(newInput[newInput.length - 1])) {
-      newInput = newInput.slice(0, newInput.length - 1);
-      setInput(newInput);
-      const stored = storedValue.slice(0, storedValue.length - 1);
-      setStoredValue(stored);
-    }
+    newInput = newInput.slice(0, newInput.length - 1);
+    setInput(newInput);
+    const stored = storedValue.slice(0, storedValue.length - 1);
+    setStoredValue(stored);
   };
 
   const handleReciprocalClick = () => {

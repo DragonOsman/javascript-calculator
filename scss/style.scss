@@ -24,6 +24,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100vh;
 
   & #root {
     width: 50%;
@@ -81,14 +82,44 @@ main {
   }
 }
 
-@media screen and (max-width: 500px) {
-
+@media screen and (min-width: 150px) and (max-width: 500px) {
+  main {
+    & #keypad {
+      & button {
+        height: 38px;
+      }
+    }
+  }
 }
 
 @media screen and (min-width: 501px) and (max-width: 767px) {
-  
+  main {
+    & #root {
+      & #screen {
+        & #formula {
+          height: 12px;
+        }
+
+        & #display {
+          height: 20px;
+        }
+      }
+
+      & #keypad {
+        & button {
+          height: 48px;
+        }
+      }
+    }
+  }
 }
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
-
+  main {
+    & #keypad {
+      & button {
+        height: 58px;
+      }
+    }
+  }
 }

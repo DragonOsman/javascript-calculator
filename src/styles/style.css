@@ -19,6 +19,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100vh;
 }
 main #root {
   width: 50%;
@@ -65,6 +66,28 @@ main #root #keypad #equals {
 }
 main #root #keypad #decimal, main #root #keypad #sign-switch {
   background-color: #fff;
+}
+
+@media screen and (min-width: 150px) and (max-width: 500px) {
+  main #keypad button {
+    height: 38px;
+  }
+}
+@media screen and (min-width: 501px) and (max-width: 767px) {
+  main #root #screen #formula {
+    height: 12px;
+  }
+  main #root #screen #display {
+    height: 20px;
+  }
+  main #root #keypad button {
+    height: 48px;
+  }
+}
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  main #keypad button {
+    height: 58px;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */
