@@ -4,8 +4,8 @@ import Display from "./Display";
 import { create, all } from "mathjs";
 
 const App = props => {
-  const [currentValue, setCurrentValue] = useState("0");
-  const [storedValue, setStoredValue] = useState("");
+  const [displayedValue, setDisplayedValue] = useState("0");
+  const [formulaString, setFormulaString] = useState("");
   const [reciprocalClicked, setReciprocalClicked] = useState(false);
   const [percentageClicked, setPercentageClicked] = useState(false);
   const [squareRootClicked, setSquareRootClicked] = useState(false);
@@ -16,11 +16,11 @@ const App = props => {
   const handleNumberClick = event => {
     const button = event.target;
     const newInput = [...input];
-    if (currentValue === "0" && button.textContent === "0") {
+    if (displayedValue === "0" && button.textContent === "0") {
       return null;
-    } else if ((currentValue === "0" && button.textContent !== "0") ||
+    } else if ((displayedValue === "0" && button.textContent !== "0") ||
     equalsClicked || reciprocalClicked || percentageClicked || squareRootClicked) {
-      setCurrentValue(button.textContent);
+      setDisplayedValue(button.textContent);
 
       // reset it to make sure other click handlers don't misunderstand
       setReciprocalClicked(false);
@@ -32,15 +32,15 @@ const App = props => {
     if (newInput.length > 0) {
       if (operators.includes(newInput[newInput.length - 1]) ||
       newInput[newInput.length - 1].endsWith("^2)")) {
-        setCurrentValue(button.textContent);
+        setDisplayedValue(button.textContent);
       } else if (!isNaN(newInput[newInput.length - 1]) || newInput[newInput.length - 1] === ".") {
-        setCurrentValue(`${currentValue}${button.textContent}`);
+        setDisplayedValue(`${displayedValue}${button.textContent}`);
       }
     }
 
     newInput.push(button.textContent);
     setInput(newInput);
-    setStoredValue(newInput.join(""));
+    setFormulaString(newInput.join(""));
   };
 
   const handleEqualsClick = event => {
@@ -56,22 +56,22 @@ const App = props => {
     };
     const math = create(all, config);
 
-    const newInput = [...input, currentValue];
-    setStoredValue(newInput.join(""));
+    const newInput = [...input, displayedValue];
+    setFormulaString(newInput.join(""));
 
-    const stored = storedValue;
+    const formula = formulaString;
     try {
-      const calculatedValue = math.round(1000000000000 * math.evaluate(stored)) / 1000000000000;
-      setCurrentValue(`${calculatedValue}`);
+      const calculatedValue = math.round(1000000000000 * math.evaluate(formula)) / 1000000000000;
+      setDisplayedValue(`${calculatedValue}`);
     } catch (err) {
       console.log(`Error occurred: ${err}`);
     }
 
     setInput([]);
-    if (!storedValue.endsWith("=")) {
-      setStoredValue(`${stored}${event.target.textContent}`);
+    if (!formulaString.endsWith("=")) {
+      setFormulaString(`${formula}${event.target.textContent}`);
     } else {
-      setStoredValue(storedValue);
+      setFormulaString(formulaString);
     }
   };
 
@@ -85,18 +85,18 @@ const App = props => {
         // and add in newly clicked one
         newInput = newInput.filter(elem => !operators.includes(elem));
         setInput(newInput);
-        setStoredValue(newInput.join(""));
+        setFormulaString(newInput.join(""));
       }
     }
 
     // take the result of the previous evaluation for a new calculation
-    if (equalsClicked || currentValue === "0") {
+    if (equalsClicked || displayedValue === "0") {
       // This means equals button was clicked (can be like this in other cases too but still)
       // set input array and storedValue to equal the result from the
       // previous calculation
-      newInput = [...newInput, currentValue];
+      newInput = [...newInput, displayedValue];
       setInput(newInput);
-      setStoredValue(newInput.join(""));
+      setFormulaString(newInput.join(""));
 
       // reset to false to make sure other click handlers don't misunderstand
       setEqualsClicked(false);
@@ -110,7 +110,7 @@ const App = props => {
 
     newInput = [...newInput, button.textContent];
     setInput(newInput);
-    setStoredValue(newInput.join(""));
+    setFormulaString(newInput.join(""));
   };
 
   const handlePercentageClick = () => {
@@ -119,28 +119,28 @@ const App = props => {
 
     // remove value from currentValue by itsef from input array
     // and leave it only inside parentheses of percentage operation
-    for (let i = 0; i < currentValue.length; i++) {
+    for (let i = 0; i < displayedValue.length; i++) {
       newInput.pop();
       setInput(newInput);
     }
 
-    newInput.push(`(${currentValue}/100)`);
+    newInput.push(`(${displayedValue}/100)`);
     setInput(newInput);
-    setStoredValue(newInput.join(""));
+    setFormulaString(newInput.join(""));
   };
 
   const handleSquareClick = () => {
     // remove value from currentValue by itsef from input array
     // and leave it only inside parentheses of square operation
     const newInput = [...input];
-    for (let i = 0; i < currentValue.length; i++) {
+    for (let i = 0; i < displayedValue.length; i++) {
       newInput.pop();
       setInput(newInput);
     }
 
-    newInput.push(`((${currentValue})^2)`);
+    newInput.push(`((${displayedValue})^2)`);
     setInput(newInput);
-    setStoredValue(newInput.join(""));
+    setFormulaString(newInput.join(""));
   };
 
   const handleSquareRootClick = () => {
@@ -148,44 +148,44 @@ const App = props => {
     setSquareRootClicked(true);
     // remove value from currentValue by itsef from input array
     // and leave it only inside parentheses of square root operation
-    for (let i = 0; i < currentValue.length; i++) {
+    for (let i = 0; i < displayedValue.length; i++) {
       newInput.pop();
       setInput(newInput);
     }
 
-    newInput.push(`sqrt(${currentValue})`);
+    newInput.push(`sqrt(${displayedValue})`);
     setInput(newInput);
-    setStoredValue(newInput.join(""));
+    setFormulaString(newInput.join(""));
   };
 
   const handleClearClick = () => {
-    setCurrentValue("0");
-    setStoredValue("");
+    setDisplayedValue("0");
+    setFormulaString("");
     const newInput = [...input];
     newInput.length = 0;
     setInput(newInput);
   };
 
   const handleClearEntryClick = () => {
-    setCurrentValue("0");
+    setDisplayedValue("0");
   };
 
   const handleBackSpaceClick = () => {
     if (!equalsClicked) {
-      if (currentValue.length === 1) {
-        setCurrentValue("0");
-      } else if (currentValue.length > 1) {
+      if (displayedValue.length === 1) {
+        setDisplayedValue("0");
+      } else if (displayedValue.length > 1) {
         // set currentValue to a string with the last element cut off
-        const newValue = currentValue.slice(0, currentValue.length - 1);
-        setCurrentValue(newValue);
+        const newValue = displayedValue.slice(0, displayedValue.length - 1);
+        setDisplayedValue(newValue);
       }
     }
 
     let newInput = [...input];
     newInput = newInput.slice(0, newInput.length - 1);
     setInput(newInput);
-    const stored = storedValue.slice(0, storedValue.length - 1);
-    setStoredValue(stored);
+    const stored = formulaString.slice(0, formulaString.length - 1);
+    setFormulaString(stored);
   };
 
   const handleReciprocalClick = () => {
@@ -194,42 +194,42 @@ const App = props => {
     const newInput = [...input];
     // remove value from currentValue by itsef from input array
     // and leave it only inside parentheses of reciprocal operation
-    for (let i = 0; i < currentValue.length; i++) {
+    for (let i = 0; i < displayedValue.length; i++) {
       newInput.pop();
       setInput(newInput);
     }
 
-    newInput.push(`(1/${currentValue})`);
+    newInput.push(`(1/${displayedValue})`);
     setInput(newInput);
-    setStoredValue(newInput.join(""));
+    setFormulaString(newInput.join(""));
   };
 
   const handleDecimalClick = event => {
     const button = event.target;
     const newInput = [...input];
-    if (currentValue.includes(button.textContent)) {
+    if (displayedValue.includes(button.textContent)) {
       return null;
     }
 
-    setCurrentValue(currentValue.concat(button.textContent));
+    setDisplayedValue(displayedValue.concat(button.textContent));
 
     let decimalCount = 0;
-    for (let i = 0; i < currentValue.length; i++) {
-      if (currentValue.charAt(i) === ".") {
+    for (let i = 0; i < displayedValue.length; i++) {
+      if (displayedValue.charAt(i) === ".") {
         decimalCount++;
       }
     }
 
     if (decimalCount > 1) {
-      for (let i = currentValue.indexOf(".") + 1; i < currentValue.length; i++) {
-        if (currentValue.charAt(i) === ".") {
-          currentValue.replace(".", "");
+      for (let i = displayedValue.indexOf(".") + 1; i < displayedValue.length; i++) {
+        if (displayedValue.charAt(i) === ".") {
+          displayedValue.replace(".", "");
         }
       }
     }
 
-    if (currentValue === "0" && !newInput.includes("0")) {
-      newInput.push(currentValue);
+    if (displayedValue === "0" && !newInput.includes("0")) {
+      newInput.push(displayedValue);
       setInput(newInput);
     }
 
@@ -238,19 +238,19 @@ const App = props => {
   };
 
   const handleSignSwitchClick = () => {
-    if (Math.sign(Number(currentValue)) === 1) {
-      setCurrentValue(`-${currentValue}`);
+    if (Math.sign(Number(displayedValue)) === 1) {
+      setDisplayedValue(`-${displayedValue}`);
       const newInput = [...input];
       newInput[newInput.length - 1] = `-${newInput[newInput.length - 1]}`;
       setInput(newInput);
-      setStoredValue(newInput.join(""));
-    } else if (Math.sign(Number(currentValue)) === -1) {
-      const positiveNum = Math.abs(Number(currentValue));
-      setCurrentValue(positiveNum.toString());
+      setFormulaString(newInput.join(""));
+    } else if (Math.sign(Number(displayedValue)) === -1) {
+      const positiveNum = Math.abs(Number(displayedValue));
+      setDisplayedValue(positiveNum.toString());
       const newInput = [...input];
       newInput[newInput.length - 1] = `${Math.abs(Number(newInput[newInput.length - 1]))}`;
       setInput(newInput);
-      setStoredValue(newInput.join(""));
+      setFormulaString(newInput.join(""));
     }
   };
 
@@ -313,8 +313,8 @@ const App = props => {
   return (
     <React.Fragment>
       <Display
-        storedValue={storedValue}
-        currentValue={currentValue}
+        storedValue={formulaString}
+        currentValue={displayedValue}
       />
       <Keypad
         clickHandler={clickHandler}
