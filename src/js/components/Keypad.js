@@ -5,152 +5,128 @@ import PropTypes from "prop-types";
 const buttons = [{
   name: "percentage",
   value: "%",
-  type: "function",
   id: "percentage",
-  className: "function keypad-button"
+  className: "function keypad-button percentage"
 }, {
   name: "clear-entry",
   value: "CE",
-  type: "effect",
   id: "clear-entry",
-  className: "effect keypad-button"
+  className: "effect keypad-button clear-entry"
 }, {
   name: "clear",
   value: "C",
-  type: "effect",
   id: "clear",
-  className: "effect keypad-button"
+  className: "effect keypad-button clear"
 }, {
   name: "backspace",
   value: "\u232b",
-  type: "effect",
   id: "backspace",
-  className: "effect keypad-button"
+  className: "effect keypad-button backspace"
 }, {
   name: "reciprocal-function",
   value: "1/𝑥",
-  type: "function",
   id: "reciprocal",
-  className: "function keypad-button"
+  className: "function keypad-button reciprocal"
 }, {
   name: "square-function",
   value: "𝑥²",
-  type: "function",
   id: "square",
-  className: "function keypad-button"
+  className: "function keypad-button square"
 }, {
   name: "square-root-function",
   value: "²√𝑥",
-  type: "function",
   id: "square-root",
-  className: "function keypad-button"
+  className: "function keypad-button square-root"
 }, {
   name: "divide",
   value: "/",
-  type: "operator",
   id: "divide",
-  className: "operator keypad-button"
+  className: "operator keypad-button divide"
 }, {
   name: "number-button",
   value: "7",
-  type: "number",
   id: "seven",
-  className: "number keypad-button"
+  className: "number keypad-button seven"
 }, {
   name: "number-button",
   value: "8",
-  type: "number",
   id: "eight",
-  className: "number keypad-button"
+  className: "number keypad-button eight"
 }, {
   name: "number-button",
   value: "9",
-  type: "number",
   id: "nine",
-  className: "number keypad-button"
+  className: "number keypad-button nine"
 }, {
   name: "multiply",
   value: "*",
-  type: "operator",
   id: "multiply",
-  className: "operator keypad-button"
+  className: "operator keypad-button multiply"
 }, {
   name: "number-button",
   value: "4",
-  type: "number",
   id: "four",
-  className: "number keypad-button"
+  className: "number keypad-button four"
 }, {
   name: "number-button",
   value: "5",
-  type: "number",
   id: "five",
-  className: "number keypad-button"
+  className: "number keypad-button five"
 }, {
   name: "number-button",
   value: "6",
-  type: "number",
   id: "six",
-  className: "number keypad-button"
+  className: "number keypad-button six"
 }, {
   name: "minus",
   value: "-",
-  type: "operator",
   id: "subtract",
-  className: "operator keypad-button"
+  className: "operator keypad-button minus"
 }, {
   name: "number-button",
   value: "1",
-  type: "number",
   id: "one",
-  className: "number keypad-button"
+  className: "number keypad-button one"
 }, {
   name: "number-button",
   value: "2",
-  type: "number",
   id: "two",
-  className: "number keypad-button"
+  className: "number keypad-button two"
 }, {
   name: "number-button",
   value: "3",
-  type: "number",
   id: "three",
-  className: "number keypad-button"
+  className: "number keypad-button three"
 }, {
   name: "add",
   value: "+",
-  type: "operator",
   id: "add",
-  className: "operator keypad-button"
+  className: "operator keypad-button add"
 }, {
   name: "sign-switch",
   value: "±",
-  type: "effect",
   id: "sign-switch",
-  className: "number-helper keypad-button"
+  className: "number-helper keypad-button sign-switch"
 }, {
   name: "number-button",
   value: "0",
-  type: "number",
   id: "zero",
-  className: "number keypad-button"
+  className: "number keypad-button zero"
 }, {
   name: "decimal",
   value: ".",
-  type: "effect",
   id: "decimal",
-  className: "number-helper keypad-button"
+  className: "number-helper keypad-button decimal"
 }, {
   name: "equals",
   value: "=",
-  type: "calculation-submit",
   id: "equals",
-  className: "calculation-submit keypad-button"
+  className: "calculation-submit keypad-button equals"
 }];
 
 const Keypad = props => {
   return (
-    <div id="keypad">
+    <div id="keypad" className="keypad">
       {buttons.map((object, index) => (
         <Button
           key={index}

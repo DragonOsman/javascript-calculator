@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 
 const Display = props => {
   return (
-    <div id="screen">
-      <div id="formula">
-        <p className="stored-value">{props.storedValue}</p>
+    <div className="screen">
+      <div className="formula">
+        <p className="formula-string">{props.storedValue}</p>
       </div>
-      <div id="display">
-        <p className="current-value">{props.currentValue}</p>
+      <div id="display" className="display">
+        <p className="display-string">{props.currentValue}</p>
       </div>
     </div>
   );

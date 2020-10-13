@@ -24,17 +24,17 @@ main {
   justify-content: center;
   height: 100vh;
 
-  & #root {
+  & .calculator-container {
     width: 50%;
     background-color: #800000;
     border: 3px solid #800000;
 
-    & #screen {
+    & .screen {
       background-color: #a9a9a9;
       width: 100%;
       height: $screen-height;
 
-      & #formula {
+      & .formula {
         width: 100%;
         font-size: 14px;
         color: #000;
@@ -43,7 +43,7 @@ main {
         height: $formula-height;
       }
   
-      & #display {
+      & .display {
         font-size: 18px;
         width: 100%;
         color: #000;
@@ -55,7 +55,7 @@ main {
       }
     }
 
-    & #keypad {
+    & .keypad {
       width: 100%;
       display: grid;
       grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -72,11 +72,11 @@ main {
         background-color: #fff;
       }
 
-      #equals {
+      .equals {
         background-color: #a62c2b
       }
 
-      #decimal, #sign-switch {
+      .decimal, .sign-switch {
         background-color: #fff;
       }
     }
@@ -85,22 +85,22 @@ main {
 
 @media screen and (min-width: 200px) and (max-width: 500px) {
   main {
-    & #root {
-      & #screen {
+    & .calculator-container {
+      & .screen {
         height: calc(15px + 5px);
 
-        & #formula {
+        & .formula {
           height: 5px;
           font-size: 4px;
         }
 
-        & #display {
+        & .display {
           height: 15px;
           font-size: 14px;
         }
       }
 
-      & #keypad {
+      & .keypad {
         & button {
           height: 30px;
         }
@@ -111,22 +111,22 @@ main {
 
 @media screen and (min-width: 501px) and (max-width: 767px) {
   main {
-    & #root {
-      & #screen {
+    & .calculator-container {
+      & .screen {
         height: calc(20px + 15px);
 
-        & #formula {
+        & .formula {
           height: 15px;
           font-size: 12px;
         }
 
-        & #display {
+        & .display {
           height: 20px;
           font-size: 15px;
         }
       }
 
-      & #keypad {
+      & .keypad {
         & button {
           height: 45px;
         }
@@ -137,16 +137,16 @@ main {
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
   main {
-    & #keypad {
-      & #screen {
+    & .keypad {
+      & .screen {
         height: calc(30px + 10px);
 
-        & #formula {
+        & .formula {
           height: 30px;
           font-size: 14px;
         }
 
-        & #display {
+        & .display {
           height: 17px;
         }
       }

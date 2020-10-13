@@ -254,7 +254,7 @@ const App = props => {
     }
   };
 
-  const clickHandler = (event) => {
+  const clickHandler = event => {
     const button = event.target;
     switch (button.id) {
       case "zero":
