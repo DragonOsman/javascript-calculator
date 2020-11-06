@@ -85,6 +85,9 @@ main {
 
 @media screen and (min-width: 200px) and (max-width: 500px) {
   main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 100vh;
 
     & .calculator-container {
@@ -114,6 +117,9 @@ main {
 
 @media screen and (min-width: 501px) and (max-width: 767px) {
   main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 100vh;
 
     & .calculator-container {
@@ -143,6 +149,9 @@ main {
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
   main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 100vh;
 
     & .keypad {
