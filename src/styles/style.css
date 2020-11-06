@@ -84,6 +84,7 @@ main .calculator-container .keypad .decimal, main .calculator-container .keypad 
   }
   main .calculator-container .keypad button {
     height: 20px;
+    width: 100%;
   }
 }
 @media screen and (min-width: 501px) and (max-width: 767px) {
@@ -100,6 +101,7 @@ main .calculator-container .keypad .decimal, main .calculator-container .keypad 
   }
   main .calculator-container .keypad button {
     height: 45px;
+    width: 100%;
   }
 }
 @media screen and (min-width: 768px) and (max-width: 1024px) {
@@ -115,6 +117,7 @@ main .calculator-container .keypad .decimal, main .calculator-container .keypad 
   }
   main .keypad button {
     height: 50px;
+    width: 100%;
   }
 }
 
