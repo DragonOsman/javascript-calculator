@@ -134,7 +134,7 @@ main .calculator-container .keypad .decimal, main .calculator-container .keypad 
     height: 17px;
   }
   main .keypad button {
-    height: 40px;
+    height: 35px;
     width: 100%;
   }
 }
