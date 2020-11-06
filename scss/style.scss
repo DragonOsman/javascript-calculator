@@ -85,6 +85,8 @@ main {
 
 @media screen and (min-width: 200px) and (max-width: 500px) {
   main {
+    height: 100%;
+
     & .calculator-container {
       & .screen {
         height: calc(15px + 5px);
@@ -102,7 +104,7 @@ main {
 
       & .keypad {
         & button {
-          height: 20px;
+          height: 30px;
           width: 100%;
         }
       }
@@ -112,6 +114,8 @@ main {
 
 @media screen and (min-width: 501px) and (max-width: 767px) {
   main {
+    height: 100%;
+    
     & .calculator-container {
       & .screen {
         height: calc(20px + 15px);
@@ -155,7 +159,7 @@ main {
       }
 
       & button {
-        height: 50px;
+        height: 40px;
         width: 100%;
       }
     }
