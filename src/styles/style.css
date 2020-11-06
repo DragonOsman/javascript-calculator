@@ -134,14 +134,13 @@ main .calculator-container .keypad .decimal, main .calculator-container .keypad 
     height: 17px;
   }
   main .keypad button {
-    height: 35px;
+    height: 45px;
     width: 100%;
   }
 }
 @media screen and (min-height: 400px) {
   main {
     height: 100%;
-    margin-top: 30px;
   }
 }
 
