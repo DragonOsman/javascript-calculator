@@ -121,8 +121,6 @@ main .calculator-container .keypad .decimal, main .calculator-container .keypad 
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 100px;
-    height: 100vh;
   }
   main .keypad .screen {
     height: calc(30px + 10px);
