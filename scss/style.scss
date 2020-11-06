@@ -130,7 +130,7 @@ main {
       & .keypad {
         & button {
           height: 35px;
-          width: 100px;
+          width: 100%;
         }
       }
     }
@@ -139,6 +139,7 @@ main {
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
   main {
+    height: 100%;
     & .keypad {
       & .screen {
         height: calc(30px + 10px);
@@ -155,7 +156,7 @@ main {
 
       & button {
         height: 50px;
-        width: 100px;
+        width: 100%;
       }
     }
   }
