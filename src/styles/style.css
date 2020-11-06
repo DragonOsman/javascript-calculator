@@ -71,6 +71,10 @@ main .calculator-container .keypad .decimal, main .calculator-container .keypad 
 }
 
 @media screen and (min-width: 200px) and (max-width: 500px) {
+  main {
+    height: 100%;
+    margin-top: 100px;
+  }
   main .calculator-container .screen {
     height: calc(15px + 5px);
   }
@@ -107,7 +111,7 @@ main .calculator-container .keypad .decimal, main .calculator-container .keypad 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
   main {
     height: 100%;
-    margin-top: 50px;
+    margin-top: 55px;
   }
   main .keypad .screen {
     height: calc(30px + 10px);
