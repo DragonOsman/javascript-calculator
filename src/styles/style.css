@@ -22,6 +22,7 @@ main {
 }
 main .calculator-container {
   width: 50%;
+  height: 100%;
   background-color: #800000;
   border: 3px solid #800000;
 }
@@ -71,12 +72,6 @@ main .calculator-container .keypad .decimal, main .calculator-container .keypad 
 }
 
 @media screen and (min-width: 200px) and (max-width: 500px) {
-  main {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-  }
   main .calculator-container .screen {
     height: calc(15px + 5px);
   }
@@ -94,12 +89,6 @@ main .calculator-container .keypad .decimal, main .calculator-container .keypad 
   }
 }
 @media screen and (min-width: 501px) and (max-width: 767px) {
-  main {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-  }
   main .calculator-container .screen {
     height: calc(20px + 15px);
   }
@@ -117,11 +106,6 @@ main .calculator-container .keypad .decimal, main .calculator-container .keypad 
   }
 }
 @media screen and (min-width: 768px) and (max-width: 1024px) {
-  main {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
   main .keypad .screen {
     height: calc(30px + 10px);
   }
