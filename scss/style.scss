@@ -1,5 +1,5 @@
 $display-height: 28px;
-$formula-height: 20px;
+$formula-height: 40px;
 $screen-height: calc(#{$display-height} + #{$formula-height});
 
 @mixin flex-me {
@@ -88,7 +88,7 @@ main {
     .calculator-container {
       & .screen {
         & .formula {
-          height: 15px;
+          height: calc(14px * 2px);
           font-size: 14px;
         }
 
@@ -111,7 +111,7 @@ main {
     .calculator-container {
       & .screen {
         & .formula {
-          height: 15px;
+          height: calc((14px * 2px) + 1px);
           font-size: 14px;
         }
 
@@ -134,7 +134,7 @@ main {
     .calculator-container {
       & .screen {
         & .formula {
-          height: 15px;
+          height: calc((14px * 2px) + 1px);
           font-size: 14px;
         }
 
@@ -157,7 +157,7 @@ main {
     .calculator-container {
       & .screen {
         & .formula {
-          height: 17px;
+          height: calc((14px * 2px) + 2px);
           font-size: 15px;
         }
 

@@ -164,6 +164,14 @@ const App = props => {
     const newInput = [...input];
     newInput.length = 0;
     setInput(newInput);
+
+    // mobile devices add a newline after the displayed value
+    // so I'm trying to fix that with this
+    if (displayedValue.endsWith("\n")) {
+      const newValue = displayedValue;
+      newValue.trimEnd(displayedValue);
+      setDisplayedValue(newValue);
+    }
   };
 
   const handleClearEntryClick = () => {
@@ -171,6 +179,14 @@ const App = props => {
   };
 
   const handleBackSpaceClick = () => {
+    // mobile devices add a newline after the displayed value
+    // so I'm trying to fix that with this
+    if (displayedValue.endsWith("\n")) {
+      const newValue = displayedValue;
+      newValue.trimEnd(displayedValue);
+      setDisplayedValue(newValue);
+    }
+
     if (!equalsClicked) {
       if (displayedValue.length === 1) {
         setDisplayedValue("0");
@@ -186,6 +202,13 @@ const App = props => {
     setInput(newInput);
     const stored = formulaString.slice(0, formulaString.length - 1);
     setFormulaString(stored);
+
+    // also put here just in case
+    if (displayedValue.endsWith("\n")) {
+      const newValue = displayedValue;
+      newValue.trimEnd(displayedValue);
+      setDisplayedValue(newValue);
+    }
   };
 
   const handleReciprocalClick = () => {
